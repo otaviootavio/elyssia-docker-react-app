@@ -5,7 +5,7 @@ class RoomModel {
   users: string[];
 
   constructor() {
-    this.uuid = Bun.hash(Date.now().toString()).toString();
+    this.uuid = crypto.randomUUID();
     this.users = [];
   }
 
