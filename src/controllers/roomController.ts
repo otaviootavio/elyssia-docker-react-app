@@ -6,7 +6,7 @@ let roomArray: RoomModel[] = [];
 const createRoom = () => {
   const newRoom = new RoomModel();
   roomArray.push(newRoom);
-  return newRoom.uuid;
+  return newRoom;
 };
 
 const deleteRoom = (uuid: string) => {

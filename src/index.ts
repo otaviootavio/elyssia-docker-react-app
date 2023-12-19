@@ -10,9 +10,13 @@ import {
 import { RoomModel } from "./models/RoomModel";
 import { UserAlreadyExistsOnRoom } from "./libs/RoomErrors";
 import { NotFoundError } from "elysia";
+import { tRoomModel } from "./models/room.model";
+import { tRoomsModel } from "./models/rooms.model";
 
 const app = new Elysia()
   .use(swagger())
+  .use(tRoomsModel)
+  .use(tRoomModel)
   .onError(({ code, error, set }) => {
     if (code === "NOT_FOUND") {
       set.status = 404;
@@ -22,12 +26,15 @@ const app = new Elysia()
   })
   .post(
     "/room",
-    (): string => {
+    (): RoomModel => {
       return createRoom();
     },
     {
       afterHandle: ({ set }) => {
         set.status = "Created";
+      },
+      response: {
+        201: "room",
       },
     }
   )
@@ -36,12 +43,18 @@ const app = new Elysia()
     (): RoomModel[] => {
       return getRooms();
     },
-    {}
+    {
+      afterHandle: ({ set }) => {
+        set.status = "Created";
+      },
+      response: {
+        201: "rooms",
+      },
+    }
   )
   .onError(({ code, error, set }) => {
     if (code === "NOT_FOUND") {
       set.status = 404;
-
       return error.message;
     }
   })
@@ -54,6 +67,9 @@ const app = new Elysia()
       params: t.Object({
         roomId: t.String(),
       }),
+      response: {
+        201: "room",
+      },
     }
   )
   .error({
@@ -84,6 +100,9 @@ const app = new Elysia()
       afterHandle: ({ set }) => {
         set.status = "Created";
       },
+      response: {
+        201: t.Void(),
+      },
     }
   )
   .onError(({ code, error, set }) => {
@@ -102,6 +121,12 @@ const app = new Elysia()
       params: t.Object({
         roomId: t.String(),
       }),
+      afterHandle: ({ set }) => {
+        set.status = "Created";
+      },
+      response: {
+        201: t.Void(),
+      },
     }
   );
 

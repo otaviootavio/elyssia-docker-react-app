@@ -5,46 +5,52 @@ import { app } from "../src";
 const api = edenTreaty<typeof app>("http://localhost:3000");
 
 describe("ElyPay", () => {
-  it("Expect a uuid on creating room", async () => {
-    const { data } = await api.room.post();
-    expect(data).toMatch(
+  it("Expect a uuid and empty room on creating room", async () => {
+    const { data: room } = await api.room.post();
+
+    expect(room).not.toBeNull;
+    if (!room) return;
+
+    expect(room.uuid).toMatch(
       /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
     );
+
+    expect(room.users).toBeEmpty;
   });
 
   describe("Test room lifecycle", async () => {
     it("Create and find the room", async () => {
-      const { data: roomUuid } = await api.room.post();
-      expect(roomUuid).not.toBeNull;
-      if (!roomUuid) return;
+      const { data: room } = await api.room.post();
+      expect(room).not.toBeNull;
+      if (!room) return;
 
       const { data: rooms } = await api.rooms.get();
       expect(rooms).not.toBeNull;
-      expect(rooms?.find((e) => e.uuid === roomUuid)).not.toBeUndefined;
+      expect(rooms?.find((e) => e.uuid === room.uuid)).not.toBeUndefined;
     });
 
     it("Add member to the rooms", async () => {
-      const { data: roomUuid } = await api.room.post();
-      expect(roomUuid).not.toBeNull;
-      if (!roomUuid) return;
+      const { data: room } = await api.room.post();
+      expect(room).not.toBeNull;
+      if (!room) return;
 
-      await api.room[roomUuid]["Joao"].put();
-      const { data: roomData } = await api.room[roomUuid].get();
+      await api.room[room.uuid]["Joao"].put();
+      const { data: roomData } = await api.room[room.uuid].get();
 
       expect(roomData).not.toBeNull;
       expect(roomData?.users.find((e) => e === "Joao")).not.toBeUndefined;
     });
 
     it("Delete room", async () => {
-      const { data: roomUuid } = await api.room.post();
-      expect(roomUuid).not.toBeNull;
-      if (!roomUuid) return;
+      const { data: room } = await api.room.post();
+      expect(room).not.toBeNull;
+      if (!room) return;
 
-      await api.room[roomUuid].delete();
+      await api.room[room.uuid].delete();
 
       const { data: rooms } = await api.rooms.get();
       expect(rooms).not.toBeNull;
-      expect(rooms?.find((e) => e.uuid === roomUuid)).toBeUndefined;
+      expect(rooms?.find((e) => e.uuid === room.uuid)).toBeUndefined;
     });
   });
 
@@ -65,15 +71,15 @@ describe("ElyPay", () => {
     });
 
     it("Duplicate User in Room", async () => {
-      const { data: roomUuid } = await api.room.post();
+      const { data: room } = await api.room.post();
 
-      if (!roomUuid) {
+      if (!room) {
         expect("UUID is null").toBe("UUID should not be null");
         return;
       }
 
-      await api.room[roomUuid]["User"].put();
-      const duplicateResponse = await api.room[roomUuid]["User"].put();
+      await api.room[room.uuid]["User"].put();
+      const duplicateResponse = await api.room[room.uuid]["User"].put();
       expect(duplicateResponse.status).toBe(409);
     });
   });
