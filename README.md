@@ -21,7 +21,7 @@ bun run seed
 Run the tests
 
 ```bash
-bun run seed
+bun run test
 ```
 
 Open http://localhost:3000/ with your browser to see the result.
