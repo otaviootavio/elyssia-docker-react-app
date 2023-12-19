@@ -9,14 +9,14 @@ class RoomModel {
     this.users = [];
   }
 
-  private addUser = (user: string) => {
+  addUser = (user: string) => {
     if (this.userExists(user))
       throw new UserAlreadyExistsOnRoom(`User ${user} already exists on room!`);
 
     this.users.push(user);
   };
 
-  private userExists = (user: string): boolean => {
+  userExists = (user: string): boolean => {
     return this.users.indexOf(user) >= 0;
   };
 }

@@ -60,7 +60,7 @@ const app = new Elysia()
   })
   .get(
     "/room/:roomId",
-    ({ params: { roomId } }): RoomModel => {
+    ({ params: { roomId } }) => {
       return getRoom(roomId);
     },
     {
@@ -68,7 +68,7 @@ const app = new Elysia()
         roomId: t.String(),
       }),
       response: {
-        201: "room",
+        200: "room",
       },
     }
   )
