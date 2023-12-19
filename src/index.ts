@@ -11,13 +11,8 @@ import { RoomModel } from "./models/RoomModel";
 import { UserAlreadyExistsOnRoom } from "./libs/RoomErrors";
 import { NotFoundError } from "elysia";
 
-const app = new Elysia();
-
-app.use(swagger());
-
-app.all("/", () => "Landing");
-
-app
+const app = new Elysia()
+  .use(swagger())
   .onError(({ code, error, set }) => {
     if (code === "NOT_FOUND") {
       set.status = 404;
@@ -115,4 +110,4 @@ console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
 );
 
-export type App = typeof app;
+export { app };
