@@ -1,4 +1,3 @@
-import { hash } from "bun";
 import { UserAlreadyExistsOnRoom } from "../libs/RoomErrors";
 
 class RoomModel {
@@ -6,7 +5,7 @@ class RoomModel {
   users: string[];
 
   constructor() {
-    this.uuid = hash(Date.now().toString()).toString();
+    this.uuid = Bun.hash(Date.now().toString()).toString();
     this.users = [];
   }
 
