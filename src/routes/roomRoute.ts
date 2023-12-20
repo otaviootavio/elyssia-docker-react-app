@@ -4,23 +4,15 @@ import { tRoomModel } from "./../models/room.model";
 import {
   addUserToRoom,
   createRoom,
-  deleteRoom,
-  getRoom,
-  getRooms,
+  deleteRoomById,
+  getAllRooms,
+  getRoomById,
 } from "./../controllers/roomController";
-import { UserAlreadyExistsOnRoom } from "./../libs/RoomErrors";
-import { NotFoundError } from "elysia";
+import { UserAlreadyExistsOnRoom, RoomNotFound } from "./../libs/RoomErrors";
 
 const createRoomRoute = new Elysia()
   .use(tRoomsModel)
   .use(tRoomModel)
-  .onError(({ code, error, set }) => {
-    if (code === "NOT_FOUND") {
-      set.status = 404;
-
-      return error.message;
-    }
-  })
   .post(
     "/room",
     () => {
@@ -36,33 +28,59 @@ const createRoomRoute = new Elysia()
     }
   );
 
-const getRoomRoute = new Elysia().use(tRoomsModel).get(
-  "/rooms",
-  () => {
-    return getRooms();
-  },
-  {
-    afterHandle: ({ set }) => {
-      set.status = "Created";
+const getAllRoomsRoute = new Elysia()
+  .use(tRoomsModel)
+  .error({
+    UserAlreadyExistsOnRoom,
+    RoomNotFound,
+  })
+  .onError(({ code, error, set }) => {
+    switch (code) {
+      case "UserAlreadyExistsOnRoom":
+        //Conflict
+        set.status = 409;
+        return error;
+      case "RoomNotFound":
+        set.status = 404;
+        return error;
+    }
+  })
+  .get(
+    "/rooms",
+    () => {
+      return getAllRooms();
     },
-    response: {
-      201: "rooms",
-    },
-  }
-);
+    {
+      afterHandle: ({ set }) => {
+        set.status = "Created";
+      },
+      response: {
+        201: "rooms",
+      },
+    }
+  );
 
 const getRoomByIdRoute = new Elysia()
   .use(tRoomModel)
+  .error({
+    UserAlreadyExistsOnRoom,
+    RoomNotFound,
+  })
   .onError(({ code, error, set }) => {
-    if (code === "NOT_FOUND") {
-      set.status = 404;
-      return error.message;
+    switch (code) {
+      case "UserAlreadyExistsOnRoom":
+        //Conflict
+        set.status = 409;
+        return error;
+      case "RoomNotFound":
+        set.status = 404;
+        return error;
     }
   })
   .get(
     "/room/:roomId",
-    ({ params: { roomId } }) => {
-      return getRoom(roomId);
+    async ({ params: { roomId } }) => {
+      return await getRoomById(roomId);
     },
     {
       params: t.Object({
@@ -72,11 +90,12 @@ const getRoomByIdRoute = new Elysia()
         200: "room",
       },
     }
-  );
+);
+  
 const addUserToRoomRoute = new Elysia()
   .error({
     UserAlreadyExistsOnRoom,
-    NotFoundError,
+    RoomNotFound,
   })
   .onError(({ code, error, set }) => {
     switch (code) {
@@ -84,15 +103,15 @@ const addUserToRoomRoute = new Elysia()
         //Conflict
         set.status = 409;
         return error;
-      case "NotFoundError":
-        set.status = "Not Found";
+      case "RoomNotFound":
+        set.status = 404;
         return error;
     }
   })
   .put(
     "/room/:roomId/:user",
-    ({ params: { roomId, user } }) => {
-      addUserToRoom(roomId, user);
+    async ({ params: { roomId, user } }) => {
+      await addUserToRoom(roomId, user);
     },
     {
       params: t.Object({
@@ -109,17 +128,25 @@ const addUserToRoomRoute = new Elysia()
   );
 
 const deleteRoomRoute = new Elysia()
+  .error({
+    UserAlreadyExistsOnRoom,
+    RoomNotFound,
+  })
   .onError(({ code, error, set }) => {
-    if (code === "NOT_FOUND") {
-      set.status = 404;
-
-      return error.message;
+    switch (code) {
+      case "UserAlreadyExistsOnRoom":
+        //Conflict
+        set.status = 409;
+        return error;
+      case "RoomNotFound":
+        set.status = 404;
+        return error;
     }
   })
   .delete(
     "/room/:roomId",
-    ({ params: { roomId } }) => {
-      deleteRoom(roomId);
+    async ({ params: { roomId } }) => {
+      await deleteRoomById(roomId);
     },
     {
       params: t.Object({
@@ -134,11 +161,13 @@ const deleteRoomRoute = new Elysia()
     }
   );
 
-const roomRoutes = new Elysia()
-  .use(createRoomRoute)
-  .use(getRoomRoute)
-  .use(getRoomByIdRoute)
-  .use(addUserToRoomRoute)
-  .use(deleteRoomRoute);
+const roomRoutes = new Elysia().group("", (app) =>
+  app
+    .use(createRoomRoute)
+    .use(getAllRoomsRoute)
+    .use(getRoomByIdRoute)
+    .use(addUserToRoomRoute)
+    .use(deleteRoomRoute)
+);
 
 export { roomRoutes };

@@ -33,3 +33,14 @@ bun run dev
 ```
 
 Then access `http://localhost:3000/swagger`
+
+
+### Prisma
+We are using Prisma SQL DB.
+```bash
+bunx prisma migrate dev
+```
+It is configured to connect with postres
+```
+docker compose up postgres
+```

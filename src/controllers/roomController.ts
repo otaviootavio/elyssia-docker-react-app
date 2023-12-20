@@ -1,52 +1,70 @@
-import { NotFoundError } from "elysia";
-import { RoomModel } from "../models/RoomModel";
+import { PrismaClient } from "@prisma/client";
+import { RoomNotFound, UserAlreadyExistsOnRoom } from "../libs/RoomErrors";
 
-let roomArray: RoomModel[] = [];
+const prisma = new PrismaClient();
 
-const createRoom = () => {
-  const newRoom = new RoomModel();
-  roomArray.push(newRoom);
+const createRoom = async () => {
+  const newRoom = await prisma.rooms.create({
+    data: {
+      users: [],
+    },
+  });
   return newRoom;
 };
 
-const deleteRoom = (uuid: string) => {
-  const room: RoomModel | undefined = roomArray.find(
-    (room) => room.uuid === uuid
-  );
+const deleteRoomById = async (uuid: string) => {
+  const room = await prisma.rooms.findUnique({
+    where: { uuid },
+  });
 
   if (!room) {
-    throw new NotFoundError(`Room with id ${uuid} was not found`);
+    throw new RoomNotFound(`Room with id ${uuid} was not found`);
   }
 
-  roomArray = roomArray.filter((room) => room.uuid !== uuid);
+  await prisma.rooms.delete({
+    where: { uuid },
+  });
 };
 
-const getRoom = (uuid: string) => {
-  const room: RoomModel | undefined = roomArray.find(
-    (room) => room.uuid === uuid
-  );
+const getRoomById = async (uuid: string) => {
+  const room = await prisma.rooms.findUnique({
+    where: { uuid },
+  });
 
   if (!room) {
-    throw new NotFoundError(`Room with id ${uuid} was not found`);
+    throw new RoomNotFound(`Room with id ${uuid} was not found`);
   }
 
-  return { uuid: room.uuid, users: room.users };
+  return room;
 };
 
-const getRooms = (): RoomModel[] => {
-  return roomArray;
+const getAllRooms = async () => {
+  return await prisma.rooms.findMany();
 };
 
-const addUserToRoom = (uuid: string, user: string) => {
-  const room: RoomModel | undefined = roomArray.find(
-    (room) => room.uuid === uuid
-  );
+const addUserToRoom = async (uuid: string, user: string) => {
+  const room = await prisma.rooms.findUnique({
+    where: { uuid },
+  });
 
   if (!room) {
-    throw new NotFoundError(`Room with id ${uuid} was not found`);
+    throw new RoomNotFound(`Room with id ${uuid} was not found`);
   }
 
-  room.addUser(user);
+  if (room.users.includes(user)) {
+    throw new UserAlreadyExistsOnRoom(
+      `User ${user} already exists in the room!`
+    );
+  }
+
+  await prisma.rooms.update({
+    where: { uuid: uuid },
+    data: {
+      users: {
+        set: [...room.users, user], // Assuming 'users' is a string array
+      },
+    },
+  });
 };
 
-export { createRoom, deleteRoom, addUserToRoom, getRoom, getRooms };
+export { createRoom, deleteRoomById, addUserToRoom, getRoomById, getAllRooms };

@@ -12,3 +12,16 @@ services:
     ports: ["3000:3000"]
     # setup a host mounted volume to sync changes to the container
     volumes: ["./:/home/bun/app"]
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
