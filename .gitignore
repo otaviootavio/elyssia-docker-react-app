@@ -43,3 +43,4 @@ package-lock.json
 .env
 prisma/migrations/migration_lock.toml
 prisma/migrations/20231220053814_init/migration.sql
+bun.lockb
