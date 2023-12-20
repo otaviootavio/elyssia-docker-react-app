@@ -3,6 +3,6 @@ import { roomRoutes } from "./routes/roomRoute";
 
 
 
-const route = new Elysia().use(roomRoutes)
+const routes = new Elysia().use(roomRoutes)
 
-export { route };
+export { routes };
