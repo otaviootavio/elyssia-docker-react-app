@@ -1,7 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { edenTreaty } from "@elysiajs/eden";
 import { app } from "../src";
-import { UserAlreadyExistsOnRoom } from "../src/libs/RoomErrors";
 
 const api = edenTreaty<typeof app>("http://localhost:3000");
 
