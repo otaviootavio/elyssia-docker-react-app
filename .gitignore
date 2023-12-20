@@ -40,3 +40,6 @@ yarn-error.log*
 **/*.log
 package-lock.json
 **/*.bun
+.env
+prisma/migrations/migration_lock.toml
+prisma/migrations/20231220053814_init/migration.sql
