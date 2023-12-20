@@ -134,10 +134,11 @@ const deleteRoomRoute = new Elysia()
     }
   );
 
-export {
-  createRoomRoute,
-  getRoomRoute,
-  getRoomByIdRoute,
-  addUserToRoomRoute,
-  deleteRoomRoute,
-};
+const roomRoutes = new Elysia()
+  .use(createRoomRoute)
+  .use(getRoomRoute)
+  .use(getRoomByIdRoute)
+  .use(addUserToRoomRoute)
+  .use(deleteRoomRoute);
+
+export { roomRoutes };

@@ -1,33 +1,9 @@
 import { Elysia, t } from "elysia";
 import { swagger } from "@elysiajs/swagger";
-import {
-  addUserToRoom,
-  createRoom,
-  deleteRoom,
-  getRoom,
-  getRooms,
-} from "./controllers/roomController";
-import { tRoomModel } from "./models/room.model";
-import { tRoomsModel } from "./models/rooms.model";
-import {
-  addUserToRoomRoute,
-  createRoomRoute,
-  deleteRoomRoute,
-  getRoomByIdRoute,
-  getRoomRoute,
-} from "./route";
+import { roomRoutes } from "./route";
 
-const app = new Elysia()
-  .use(tRoomsModel)
-  .use(tRoomModel)
-  .use(swagger())
-  .use(createRoomRoute)
-  .use(getRoomRoute)
-  .use(getRoomByIdRoute)
-  .use(addUserToRoomRoute)
-  .use(deleteRoomRoute);
+const app = new Elysia().use(swagger()).use(roomRoutes).listen(3000);
 
-app.listen(3000);
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
 );
