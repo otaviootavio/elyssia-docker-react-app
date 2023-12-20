@@ -1,24 +1,24 @@
 import { describe, expect, it } from "bun:test";
 import { edenTreaty } from "@elysiajs/eden";
 import { app } from "../src";
+import { UserAlreadyExistsOnRoom } from "../src/libs/RoomErrors";
 
 const api = edenTreaty<typeof app>("http://localhost:3000");
 
 describe("ElyPay", () => {
-  it("Expect a uuid and empty room on creating room", async () => {
-    const { data: room } = await api.room.post();
-
-    expect(room).not.toBeNull;
-    if (!room) return;
-
-    expect(room.uuid).toMatch(
-      /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
-    );
-
-    expect(room.users).toBeEmpty;
-  });
-
   describe("Test room lifecycle", async () => {
+    it("Expect a uuid and empty room on creating room", async () => {
+      const { data: room } = await api.room.post();
+
+      expect(room).not.toBeNull;
+      if (!room) return;
+
+      expect(room.uuid).toMatch(
+        /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+      );
+
+      expect(room.users).toBeEmpty;
+    });
     it("Create and find the room", async () => {
       const { data: room } = await api.room.post();
       expect(room).not.toBeNull;
