@@ -4,8 +4,8 @@
   "scripts": {
     "test": "bun test ./test/test.ts",
     "dev": "bun run --watch src/index.ts",
-    "build": "bun build src/index.ts --outdir ./build",
-    "seed": "bun run src/seed.ts"
+    "build": "bun build ./src/index.ts --outdir ./build --target node --splitting",
+    "seed": "bun run ./src/seed.ts"
   },
   "dependencies": {
     "@elysiajs/eden": "^0.7.7",
