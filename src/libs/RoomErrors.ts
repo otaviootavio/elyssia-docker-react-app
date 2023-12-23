@@ -4,4 +4,11 @@ class UserAlreadyExistsOnRoom extends Error {
   }
 }
 
-export { UserAlreadyExistsOnRoom };
+class RoomNotFound extends Error {
+  constructor(public message: string) {
+    super(message);
+  }
+}
+
+
+export { UserAlreadyExistsOnRoom, RoomNotFound };

@@ -18,8 +18,6 @@ Seed the database ( currently stored on memory runtime)
 bun run seed
 ```
 
-Run the tests
-
 ```bash
 bun run test
 ```
@@ -33,3 +31,38 @@ bun run dev
 ```
 
 Then access `http://localhost:3000/swagger`
+
+
+### Prisma
+We are using Prisma.
+
+
+### Set up postgres
+It is configured to connect with postres. Setup the docker:
+
+```bash
+docker compose up postgres
+```
+
+Access the docker and setup database:
+Start the db on dockercompose
+
+```bash
+docker exec -it <image-id> bash
+```
+
+```bash
+bunx prisma generate
+```
+
+```bash
+bunx prisma migrate dev
+```
+
+```bash
+bunx prisma db push
+```
+
+### Known error:
+[Bun doesn't run prisma generate or prisma migrate inside docker containers or WSL](https://github.com/oven-sh/bun/issues/5320)
+Solution: use only the docker postgres and run the app locally.
