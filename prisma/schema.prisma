@@ -3,7 +3,6 @@ generator client {
   binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -12,12 +11,13 @@ datasource db {
 model rooms {
   uuid      String   @id @unique @default(uuid())
   createdAt DateTime @default(now())
-  users     String[]
+  users     users[]
 }
-
 
 model users {
   uuid      String   @id @unique @default(uuid())
   createdAt DateTime @default(now())
-  name String
+  name      String
+  rooms     rooms?   @relation(fields: [roomsUuid], references: [uuid])
+  roomsUuid String?
 }

@@ -90,8 +90,8 @@ const getRoomByIdRoute = new Elysia()
         200: "room",
       },
     }
-);
-  
+  );
+
 const addUserToRoomRoute = new Elysia()
   .error({
     UserAlreadyExistsOnRoom,

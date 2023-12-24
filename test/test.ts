@@ -71,14 +71,20 @@ describe("ElyPay", () => {
 
     it("Duplicate User in Room", async () => {
       const { data: room } = await api.room.post();
+      const { data: user } = await api.user.post({ name: "TestUser" });
 
       if (!room) {
         expect("UUID is null").toBe("UUID should not be null");
         return;
       }
 
-      await api.room[room.uuid]["User"].put();
-      const duplicateResponse = await api.room[room.uuid]["User"].put();
+      if (!user) {
+        expect("UUID is null").toBe("UUID should not be null");
+        return;
+      }
+
+      await api.room[room.uuid][user.uuid].put();
+      const duplicateResponse = await api.room[room.uuid][user.uuid].put();
       expect(duplicateResponse.status).toBe(409);
     });
   });
