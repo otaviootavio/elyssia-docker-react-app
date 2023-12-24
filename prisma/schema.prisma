@@ -14,3 +14,10 @@ model rooms {
   createdAt DateTime @default(now())
   users     String[]
 }
+
+
+model users {
+  uuid      String   @id @unique @default(uuid())
+  createdAt DateTime @default(now())
+  name String
+}
