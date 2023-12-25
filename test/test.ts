@@ -75,6 +75,15 @@ describe("ElyPay", () => {
       expect(users).not.toBeNull();
       expect(users?.find((e) => e.uuid === user.uuid)).not.toBeUndefined();
     });
+    it("Delete user", async () => {
+      const { data: user } = await api.user.post({ name: "TestUser" })
+      expect(user).not.toBeNull();
+      if (!user) return;
+
+      await api.user[user.uuid].delete()
+      const { status } = await api.user[user.uuid].get()
+      expect(status).toBe(404)
+    });
   });
 
   describe("Error Handling Tests", () => {

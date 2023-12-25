@@ -2,6 +2,7 @@ import Elysia, { t } from "elysia";
 import { userController } from "../controllers/userController";
 import { tUsersModel } from "../models/users.model";
 import { tUserModel } from "../models/user.model";
+import { UserNotFound } from "./../libs/UserErrors"
 
 const createUserRoute = new Elysia()
   .use(tUserModel)
@@ -32,24 +33,53 @@ const getAllUsers = new Elysia()
   }
   );
 
-const getUserByUuid = new Elysia().
-  get("/user/:userid",
+const getUserByUuid = new Elysia()
+  .use(tUserModel)
+  .error({ UserNotFound })
+  .onError(({ code, error, set }) => {
+    switch (code) {
+      case "UserNotFound":
+        set.status = 404;
+        return error;
+    }
+  })
+  .get("/user/:userid",
     async ({ params: { userid } }) => {
       return await userController.getUserByUuid(userid)
     }, {
     params: t.Object({
       userid: t.String(),
-    })
+    }),
+    afterHandle: ({ set }) => {
+      set.status = 204;
+    },
+    response: {
+      204: 'user',
+    }
   })
 
-const deleteUserById = new Elysia().
-  delete("/user/:userid",
+const deleteUserById = new Elysia()
+  .error({ UserNotFound })
+  .onError(({ code, error, set }) => {
+    switch (code) {
+      case "UserNotFound":
+        set.status = 404;
+        return error;
+    }
+  })
+  .delete("/user/:userid",
     async ({ params: { userid } }) => {
-      return await userController.deleteUser(userid)
+      await userController.deleteUser(userid)
     }, {
     params: t.Object({
       userid: t.String()
-    })
+    }),
+    afterHandle: ({ set }) => {
+      set.status = "OK";
+    },
+    response: {
+      200: t.Void(),
+    },
   })
 const userRoutes = new Elysia().group("", (app) => app
   .use(createUserRoute)

@@ -1,4 +1,5 @@
 import { PrismaClient, users } from "@prisma/client";
+import { UserNotFound } from "../libs/UserErrors";
 
 const prisma = new PrismaClient();
 
@@ -12,6 +13,14 @@ const userController = {
     return newUser;
   },
   deleteUser: async (uuid: string) => {
+    const user = await prisma.users.findUnique({
+      where: { uuid },
+    });
+
+    if (!user) {
+      throw new UserNotFound(`User with id ${uuid} was not found`);
+    }
+
     await prisma.users.delete({
       where: { uuid },
     });
@@ -19,7 +28,12 @@ const userController = {
   // updateUser: async () => {
   // },
   getUserByUuid: async (uuid: string): Promise<users> => {
-    const user: users = await prisma.users.findUniqueOrThrow({ where: { uuid } })
+    const user = await prisma.users.findUnique({ where: { uuid } })
+
+    if (!user) {
+      throw new UserNotFound(`User with id ${uuid} was not found`);
+    }
+
     return user
   },
   getAllUsers: async (): Promise<users[]> => {
