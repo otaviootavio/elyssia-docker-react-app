@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { RoomNotFound, UserAlreadyExistsOnRoom } from "../libs/RoomErrors";
+import { UserNotFound } from "../libs/UserErrors";
 
 const prisma = new PrismaClient();
 
@@ -51,12 +52,15 @@ const getAllRooms = async () => {
 
 const addUserToRoom = async (roomId: string, userId: string) => {
 
-  const existingAssociation = await prisma.users.findFirst({
+  const existingUser = await prisma.users.findFirst({
     where: {
-      uuid: userId,
-      roomsUuid: roomId,
+      uuid: userId
     },
   });
+
+  if (!existingUser) {
+    throw new UserNotFound(`User with id ${userId} was not found`);
+  }
 
   const room = await prisma.rooms.findUnique({
     where: { uuid: roomId },
@@ -65,6 +69,13 @@ const addUserToRoom = async (roomId: string, userId: string) => {
   if (!room) {
     throw new RoomNotFound(`Room with id ${roomId} was not found`);
   }
+
+  const existingAssociation = await prisma.users.findFirst({
+    where: {
+      uuid: userId,
+      roomsUuid: roomId,
+    },
+  });
 
   if (existingAssociation) {
     throw new UserAlreadyExistsOnRoom("User is already in the room");
