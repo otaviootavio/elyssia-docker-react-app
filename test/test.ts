@@ -44,6 +44,31 @@ describe("ElyPay", () => {
       expect(roomData?.users.find((e) => e === user.uuid)).not.toBeUndefined();
     });
 
+    it("Add members to the room and delete one user", async () => {
+      const { data: room } = await api.room.post();
+      expect(room).not.toBeNull();
+      if (!room) return;
+
+      const { data: user1 } = await api.user.post({ name: "TestUser1" })
+      expect(user1).not.toBeNull();
+      if (!user1) return;
+
+      const { data: user2 } = await api.user.post({ name: "TestUser2" })
+      expect(user2).not.toBeNull();
+      if (!user2) return;
+
+      await api.room[room.uuid][user1.uuid].put()
+      await api.room[room.uuid][user2.uuid].put()
+      const { data: roomBeforeDelete } = await api.room[room.uuid].get()
+      expect(roomBeforeDelete?.users.findIndex(e => e === user1.uuid)).not.toBeNegative()
+      expect(roomBeforeDelete?.users.findIndex(e => e === user2.uuid)).not.toBeNegative()
+
+      await api.user[user2.uuid].delete()
+      const { data: roomAfterDelete } = await api.room[room.uuid].get()
+      expect(roomAfterDelete?.users.findIndex(e => e === user1.uuid)).not.toBeNegative()
+      expect(roomAfterDelete?.users.findIndex(e => e === user2.uuid)).toBeNegative()
+    });
+
     it("Delete room", async () => {
       const { data: room } = await api.room.post();
       expect(room).not.toBeNull();
