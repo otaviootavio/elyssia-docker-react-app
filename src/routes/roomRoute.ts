@@ -9,6 +9,7 @@ import {
   getRoomById,
 } from "./../controllers/roomController";
 import { UserAlreadyExistsOnRoom, RoomNotFound } from "./../libs/RoomErrors";
+import { UserNotFound } from "./../libs/UserErrors"
 
 const createRoomRoute = new Elysia()
   .use(tRoomsModel)
@@ -90,12 +91,13 @@ const getRoomByIdRoute = new Elysia()
         200: "room",
       },
     }
-);
-  
+  );
+
 const addUserToRoomRoute = new Elysia()
   .error({
     UserAlreadyExistsOnRoom,
     RoomNotFound,
+    UserNotFound
   })
   .onError(({ code, error, set }) => {
     switch (code) {
@@ -104,6 +106,9 @@ const addUserToRoomRoute = new Elysia()
         set.status = 409;
         return error;
       case "RoomNotFound":
+        set.status = 404;
+        return error;
+      case "UserNotFound":
         set.status = 404;
         return error;
     }
