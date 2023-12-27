@@ -2,7 +2,11 @@ import { PrismaClient } from "@prisma/client";
 import { RoomNotFound, UserAlreadyExistsOnRoom } from "../libs/RoomErrors";
 import { UserNotFound } from "../libs/UserErrors";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient(
+  {
+    log: ['query', 'info', 'warn', 'error'],
+  }
+);
 
 const createRoom = async () => {
   const newRoom = await prisma.rooms.create({
@@ -30,7 +34,7 @@ const deleteRoomById = async (uuid: string) => {
 
 const getRoomById = async (uuid: string) => {
   const roomWithUsers = await prisma.rooms.findUnique({
-    where: { uuid },
+    where: { uuid: uuid },
     include: {
       users: true, // Include the users in each room
     },

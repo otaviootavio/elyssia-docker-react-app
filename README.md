@@ -32,12 +32,12 @@ bun run dev
 
 Then access `http://localhost:3000/swagger`
 
-
 ### Prisma
+
 We are using Prisma.
 
-
 ### Set up postgres
+
 It is configured to connect with postres. Setup the docker:
 
 ```bash
@@ -64,5 +64,19 @@ bunx prisma db push
 ```
 
 ### Known error:
+
 [Bun doesn't run prisma generate or prisma migrate inside docker containers or WSL](https://github.com/oven-sh/bun/issues/5320)
-Solution: use only the docker postgres and run the app locally.
+Solution: use only the docker postgres and run the app locally. To dockerize the application there is some work arround at dockerfile.
+
+[Error occurred during query execution: ConnectorError code:26000](https://github.com/prisma/prisma/issues/21531)
+Solution: add `pgbouncer=true` at the end of `DATABASE_URL`
+
+### Building to dev
+
+```bash
+docker build --pull -t elypay-dev .
+```
+
+```bash
+docker run -d -p 3000:3000 elypay-dev
+```

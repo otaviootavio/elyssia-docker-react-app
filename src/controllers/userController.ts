@@ -1,7 +1,11 @@
 import { PrismaClient, users } from "@prisma/client";
 import { UserNotFound } from "../libs/UserErrors";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient(
+  {
+    log: ['query', 'info', 'warn', 'error'],
+  }
+);
 
 const userController = {
   createUser: async (name: string): Promise<users> => {
