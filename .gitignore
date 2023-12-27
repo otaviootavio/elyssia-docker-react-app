@@ -41,5 +41,4 @@ yarn-error.log*
 package-lock.json
 **/*.bun
 .env
-prisma/migrations
 bun.lockb
