@@ -4,22 +4,24 @@ import { app } from "../../../api/src";
 
 const api = edenTreaty<typeof app>("http://localhost:3000");
 
-type Room = {
+type user = {
   uuid: string;
   createdAt: Date;
-};
+  name: string;
+  roomsUuid: string | null;
+} | null;
 
-const useGetRooms = () => {
-  const [rooms, setRooms] = useState<Room[] | null>([]);
+const usePostNewUser = () => {
+  const [user, setUser] = useState<user>(null);
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [error, setError] = useState<any>(null);
 
-  const fetchData = async () => {
+  const postUser = async (name: string) => {
     setIsLoading(true);
     try {
-      const { data: data } = await api.rooms.get();
-      setRooms(data);
+      const { data: data } = await api.user.post({ name: name });
+      setUser(data);
       setError(null);
     } catch (error: unknown) {
       console.error("Error fetching data:", error);
@@ -28,11 +30,7 @@ const useGetRooms = () => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  return { rooms, isLoading, error };
+  return { user, isLoading, error, postUser };
 };
 
-export default useGetRooms;
+export default usePostNewUser;

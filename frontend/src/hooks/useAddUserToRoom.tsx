@@ -1,38 +1,31 @@
-import { useState, useEffect } from "react";
 import { edenTreaty } from "@elysiajs/eden";
+import { useState } from "react";
 import { app } from "../../../api/src";
 
 const api = edenTreaty<typeof app>("http://localhost:3000");
 
-type Room = {
-  uuid: string;
-  createdAt: Date;
-};
-
-const useGetRooms = () => {
-  const [rooms, setRooms] = useState<Room[] | null>([]);
+const useAddUserToRoom = () => {
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [error, setError] = useState<any>(null);
+  const [success, setSuccess] = useState(false);
 
-  const fetchData = async () => {
+  const linkUserToRoom = async (roomId: string, userId: string) => {
     setIsLoading(true);
+    setSuccess(false);
     try {
-      const { data: data } = await api.rooms.get();
-      setRooms(data);
+      await api.room[roomId][userId].put();
+      setSuccess(true);
       setError(null);
     } catch (error: unknown) {
-      console.error("Error fetching data:", error);
+      console.error("Error linking user to room:", error);
       setError(error);
+      setSuccess(false);
     }
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  return { rooms, isLoading, error };
+  return { linkUserToRoom, isLoading, error, success };
 };
 
-export default useGetRooms;
+export default useAddUserToRoom;

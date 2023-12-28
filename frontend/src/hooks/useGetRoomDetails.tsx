@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import { edenTreaty } from "@elysiajs/eden";
 import { app } from "../../../api/src";
+import getUuidFromUrl from "../util/getUuidFromUrl";
 
 const api = edenTreaty<typeof app>("http://localhost:3000");
 
-type Room = {
+type RoomDetails = {
   uuid: string;
-  createdAt: Date;
+  users: string[];
 };
 
-const useGetRooms = () => {
-  const [rooms, setRooms] = useState<Room[] | null>([]);
+const useGetRoomDetails = () => {
+  const uuid = getUuidFromUrl();
+
+  const [roomDetails, setRoomDetails] = useState<RoomDetails | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [error, setError] = useState<any>(null);
@@ -18,8 +21,8 @@ const useGetRooms = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const { data: data } = await api.rooms.get();
-      setRooms(data);
+      const { data: data } = await api.room[uuid].get();
+      setRoomDetails(data);
       setError(null);
     } catch (error: unknown) {
       console.error("Error fetching data:", error);
@@ -30,9 +33,10 @@ const useGetRooms = () => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { rooms, isLoading, error };
+  return { roomDetails, isLoading, error };
 };
 
-export default useGetRooms;
+export default useGetRoomDetails;

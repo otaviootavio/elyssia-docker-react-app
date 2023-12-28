@@ -1,12 +1,10 @@
-import Rooms from "./components/Rooms";
+import Room from "./components/Room/Room";
+import Rooms from "./components/Rooms/Rooms";
+import getUuidFromUrl from "./util/getUuidFromUrl";
 
 function App() {
-  return (
-    <>
-      <Rooms />
-      <p>Ola aaaaaaaaaa!</p>
-    </>
-  );
+  const uuid = getUuidFromUrl();
+  return <>{uuid ? <Room /> : <Rooms />}</>;
 }
 
 export default App;
