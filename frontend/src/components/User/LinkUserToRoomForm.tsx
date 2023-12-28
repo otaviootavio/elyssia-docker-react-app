@@ -32,7 +32,7 @@ const AddUserToRoomForm = () => {
         </button>
       </form>
       {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
+      {error && <p>Error: {JSON.stringify(error)}</p>}
       {success && <p>User linked to room successfully!</p>}
     </div>
   );

@@ -14,9 +14,15 @@ const useAddUserToRoom = () => {
     setIsLoading(true);
     setSuccess(false);
     try {
-      await api.room[roomId][userId].put();
+      const res = await api.room[roomId][userId].put();
       setSuccess(true);
       setError(null);
+
+      if (res.error) {
+        console.error("Error linking user to room:", res.error);
+        setError(res.error);
+        setSuccess(false);
+      }
     } catch (error: unknown) {
       console.error("Error linking user to room:", error);
       setError(error);
