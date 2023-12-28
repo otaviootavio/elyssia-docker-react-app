@@ -2,16 +2,14 @@
 version: "3.9"
 
 services:
+  frontend:
+    build: ./frontend/
+    ports:
+      - "5173:5173"
   app:
-    image: "oven/bun"
-    # override default entrypoint allows us to sdo `bun install` before serving
-    entrypoint: []
-    # execute bun install before we start the dev server in watch mode
-    command: "/bin/sh -c 'bun install && bun run --watch src/index.ts'"
-    # expose the right ports
-    ports: ["3000:3000"]
-    # setup a host mounted volume to sync changes to the container
-    volumes: ["./:/home/bun/app"]
+    build: ./api/
+    ports:
+      - "3000:3000"
   postgres:
     image: postgres:latest
     environment:
