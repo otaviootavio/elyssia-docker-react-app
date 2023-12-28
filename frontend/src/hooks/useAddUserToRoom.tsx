@@ -1,8 +1,5 @@
-import { edenTreaty } from "@elysiajs/eden";
 import { useState } from "react";
-import { app } from "../../../api/src";
-
-const api = edenTreaty<typeof app>("http://localhost:3000");
+import { api } from "../util/apiConection";
 
 const useAddUserToRoom = () => {
   const [isLoading, setIsLoading] = useState(false);

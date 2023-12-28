@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-import { edenTreaty } from "@elysiajs/eden";
-import { app } from "../../../api/src";
-
-const api = edenTreaty<typeof app>("http://localhost:3000");
+import { api } from "../util/apiConection";
 
 type Room = {
   uuid: string;
