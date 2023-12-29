@@ -43,6 +43,14 @@ const userController = {
   getAllUsers: async (): Promise<users[]> => {
     const allUsers: users[] = await prisma.users.findMany();
     return allUsers;
+  },
+
+  addPizzaToUser: async (userId: string, slicesEaten: number) => {
+    await prisma.users.update({
+      where: { uuid: userId },
+      data: { slicesEaten: slicesEaten }
+    })
+    return
   }
 };
 

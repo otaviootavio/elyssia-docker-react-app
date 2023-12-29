@@ -16,10 +16,13 @@ const createRoomRoute = new Elysia()
   .use(tRoomModel)
   .post(
     "/room",
-    () => {
-      return createRoom();
+    ({ body }) => {
+      return createRoom(body.totalSlices);
     },
     {
+      body: t.Object({
+        totalSlices: t.Number()
+      }),
       afterHandle: ({ set }) => {
         set.status = "Created";
       },
