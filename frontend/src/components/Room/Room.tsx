@@ -1,3 +1,4 @@
+import AddPizza from "../Pizza/AddPizza";
 import AddUserToRoomForm from "../User/LinkUserToRoomForm";
 import NewUserForm from "../User/NewUserForm";
 import RoomDetails from "./RoomDetails";
@@ -9,6 +10,7 @@ const Room = () => {
       <RoomDetails />
       <NewUserForm />
       <AddUserToRoomForm />
+      <AddPizza />
     </div>
   );
 };

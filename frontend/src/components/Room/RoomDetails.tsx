@@ -1,4 +1,5 @@
 import useGetRoomDetails from "../../hooks/useGetRoomDetails";
+import UserItem from "../User/UserItem";
 
 const RoomDetails = () => {
   const { roomDetails, isLoading, error } = useGetRoomDetails();
@@ -19,10 +20,13 @@ const RoomDetails = () => {
     <div>
       <h2>Room Details</h2>
       <p>UUID: {roomDetails.uuid}</p>
+      <p>Total slices: {roomDetails.totalSlices}</p>
       <h3>Users in this Room:</h3>
       <ul>
         {roomDetails.users.map((user, index) => (
-          <li key={index}>{user}</li>
+          <li key={index}>
+            <UserItem userId={user} />
+          </li>
         ))}
       </ul>
     </div>

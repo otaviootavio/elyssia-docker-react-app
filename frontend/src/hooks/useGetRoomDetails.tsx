@@ -5,6 +5,7 @@ import { api } from "../util/apiConection";
 type RoomDetails = {
   uuid: string;
   users: string[];
+  totalSlices: number;
 };
 
 const useGetRoomDetails = () => {
@@ -18,9 +19,14 @@ const useGetRoomDetails = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const { data: data } = await api.room[uuid].get();
-      setRoomDetails(data);
+      const res = await api.room[uuid].get();
+      setRoomDetails(res.data);
       setError(null);
+
+      if (res.error) {
+        console.error("Error adding pizza slice to user:", res.error);
+        setError(res.error);
+      }
     } catch (error: unknown) {
       console.error("Error fetching data:", error);
       setError(error);
