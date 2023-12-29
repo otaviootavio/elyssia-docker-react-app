@@ -8,7 +8,7 @@ type room = {
 } | null;
 
 const usePostNewRoom = () => {
-  const [user, setUser] = useState<room>(null);
+  const [room, setRoom] = useState<room>(null);
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [error, setError] = useState<any>(null);
@@ -17,7 +17,7 @@ const usePostNewRoom = () => {
     setIsLoading(true);
     try {
       const res = await api.room.post({ totalSlices: totalSlices });
-      setUser(res.data);
+      setRoom(res.data);
       setError(null);
 
       if (res.error) {
@@ -31,7 +31,7 @@ const usePostNewRoom = () => {
     setIsLoading(false);
   };
 
-  return { user, isLoading, error, postUser };
+  return { room, isLoading, error, postUser };
 };
 
 export default usePostNewRoom;

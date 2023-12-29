@@ -1,8 +1,20 @@
 import { useState } from "react";
 import usePostNewRoom from "../../hooks/usePostNewRoom";
+import {
+  Alert,
+  AlertIcon,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Input,
+  InputGroup,
+  InputRightElement,
+} from "@chakra-ui/react";
 
 const NewRoom = () => {
-  const { user, isLoading, error, postUser } = usePostNewRoom();
+  const { room, isLoading, error, postUser } = usePostNewRoom();
   const [totalSlices, setTotalSlices] = useState(0);
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
@@ -11,25 +23,48 @@ const NewRoom = () => {
   };
 
   return (
-    <div>
-      <h2>Create a New Room</h2>
-      <form onSubmit={handleSubmit}>
+    <Card margin="10px">
+      <CardHeader>
+        <b>Create a New Room</b>
+      </CardHeader>
+      <CardBody>
         <label htmlFor="totalSlices">Total Slices: </label>
-        <input
-          type="number"
-          id="totalSlices"
-          value={totalSlices}
-          onChange={(e) => setTotalSlices(parseInt(e.target.value, 10))}
-        />
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Creating..." : "Create Room"}
-        </button>
-      </form>
-
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
-      {user && <p>Room Created! ID: {user.uuid}</p>}
-    </div>
+        <InputGroup>
+          <Input
+            type="number"
+            id="totalSlices"
+            value={totalSlices}
+            width="34rem"
+            onChange={(e) => setTotalSlices(parseInt(e.target.value, 10))}
+          />
+          <InputRightElement width="5rem">
+            <Button
+              isLoading={isLoading}
+              disabled={isLoading}
+              size="sm"
+              onClick={handleSubmit}
+              h="1.75rem"
+            >
+              {isLoading ? "Creating..." : "Create"}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+      </CardBody>
+      <CardFooter>
+        {error && (
+          <Alert status="error">
+            <AlertIcon />
+            {error.message}
+          </Alert>
+        )}
+        {room && (
+          <Alert status="success">
+            <AlertIcon />
+            Room created! {room.uuid}
+          </Alert>
+        )}
+      </CardFooter>
+    </Card>
   );
 };
 
