@@ -1,31 +1,76 @@
+import {
+  Box,
+  Text,
+  Heading,
+  List,
+  ListItem,
+  Alert,
+  AlertIcon,
+  Skeleton,
+  VStack,
+} from "@chakra-ui/react";
 import useGetRoomDetails from "../../hooks/useGetRoomDetails";
+import UserItem from "../User/UserItem";
 
 const RoomDetails = () => {
   const { roomDetails, isLoading, error } = useGetRoomDetails();
 
   if (isLoading) {
-    return <p>Loading room details...</p>;
+    return (
+      <Box p={4}>
+        <Skeleton height="20px" width="200px" mb={4} />
+        <Skeleton height="15px" mb={4} />
+        <Skeleton height="15px" mb={4} />
+        <Skeleton height="20px" width="150px" mb={4} />
+        <VStack spacing={4}>
+          {Array(3)
+            .fill("")
+            .map((_, index) => (
+              <Box key={index} width="full">
+                <Skeleton height="50px" />
+              </Box>
+            ))}
+        </VStack>
+      </Box>
+    );
   }
 
   if (error) {
-    return <p>Error loading room details: {error.message}</p>;
+    return (
+      <Alert status="error">
+        <AlertIcon />
+        Error loading room details: {error.message}
+      </Alert>
+    );
   }
 
   if (!roomDetails) {
-    return <p>No room details found.</p>;
+    return <Text p={4}>No room details found.</Text>;
   }
 
   return (
-    <div>
-      <h2>Room Details</h2>
-      <p>UUID: {roomDetails.uuid}</p>
-      <h3>Users in this Room:</h3>
-      <ul>
-        {roomDetails.users.map((user, index) => (
-          <li key={index}>{user}</li>
+    <>
+      <Heading as="h2" size="lg">
+        Room Details
+      </Heading>
+      <Text mt={2}>
+        <strong>UUID:</strong> {roomDetails.uuid}
+      </Text>
+      <Text mt={2}>
+        <strong>Total slices:</strong> {roomDetails.totalSlices}
+      </Text>
+
+      <Heading as="h3" size="md" mt={4}>
+        Users in this Room:
+      </Heading>
+      <List spacing={3} mt={2}>
+        {roomDetails.users.map((user) => (
+          <ListItem key={user}>
+            <UserItem userId={user} />
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </>
   );
 };
 

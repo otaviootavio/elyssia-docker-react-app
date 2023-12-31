@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useAddUserToRoom from "../../hooks/useAddUserToRoom";
+import usePostPizzaToUser from "../../hooks/usePostPizzaToUser";
 import {
   Alert,
   AlertIcon,
@@ -8,23 +8,28 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
-import getUuidFromUrl from "../../util/getUuidFromUrl";
 
-const AddUserToRoomForm = () => {
+const AddPizza = () => {
+  const [pizzaSlices, setPizzaSlices] = useState<number>(0);
   const [userId, setUserId] = useState("");
-  const { linkUserToRoom, isLoading, error, success } = useAddUserToRoom();
-  const roomId = getUuidFromUrl();
+  const { error, isLoading, linkUserToRoom, success } = usePostPizzaToUser();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    linkUserToRoom(roomId, userId);
+    linkUserToRoom(pizzaSlices, userId);
   };
 
   return (
     <Stack spacing={3}>
       <Heading as="h2" size="lg">
-        Add user to room!
+        Add slice to user!
       </Heading>
+      <Input
+        type="number"
+        value={pizzaSlices}
+        onChange={(e) => setPizzaSlices(parseInt(e.target.value))}
+        placeholder="Ammount of slices"
+      />
       <Input
         type="text"
         value={userId}
@@ -32,8 +37,9 @@ const AddUserToRoomForm = () => {
         placeholder="Enter User ID"
       />
       <Button onClick={handleSubmit} isLoading={isLoading}>
-        Link
+        Eat!
       </Button>
+      {isLoading && <p>Loading...</p>}
       {error && (
         <Alert status="error">
           <AlertIcon /> Error: {JSON.stringify(error)}
@@ -42,11 +48,11 @@ const AddUserToRoomForm = () => {
       {success && (
         <Alert status="success">
           <AlertIcon />
-          User linked to room successfully!
+          Yooooo, eat that pizza!
         </Alert>
       )}
     </Stack>
   );
 };
 
-export default AddUserToRoomForm;
+export default AddPizza;

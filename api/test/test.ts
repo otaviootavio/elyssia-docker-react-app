@@ -7,7 +7,7 @@ const api = edenTreaty<typeof app>("http://localhost:3000");
 describe("ElyPay", () => {
   describe("Test room lifecycle", async () => {
     it("Expect a uuid and empty room on creating room", async () => {
-      const { data: room } = await api.room.post();
+      const { data: room } = await api.room.post({ totalSlices: 10 });
 
       expect(room).not.toBeNull();
       if (!room) return;
@@ -19,7 +19,7 @@ describe("ElyPay", () => {
       expect(room.users).toBeEmpty();
     });
     it("Create and find the room", async () => {
-      const { data: room } = await api.room.post();
+      const { data: room } = await api.room.post({ totalSlices: 10 });
       expect(room).not.toBeNull();
       if (!room) return;
 
@@ -29,7 +29,7 @@ describe("ElyPay", () => {
     });
 
     it("Add member to the rooms", async () => {
-      const { data: room } = await api.room.post();
+      const { data: room } = await api.room.post({ totalSlices: 10 });
       expect(room).not.toBeNull();
       if (!room) return;
 
@@ -45,7 +45,7 @@ describe("ElyPay", () => {
     });
 
     it("Add members to the room and delete one user", async () => {
-      const { data: room } = await api.room.post();
+      const { data: room } = await api.room.post({ totalSlices: 10 });
       expect(room).not.toBeNull();
       if (!room) return;
 
@@ -70,7 +70,7 @@ describe("ElyPay", () => {
     });
 
     it("Delete room", async () => {
-      const { data: room } = await api.room.post();
+      const { data: room } = await api.room.post({ totalSlices: 10 });
       expect(room).not.toBeNull();
       if (!room) return;
 
@@ -111,6 +111,32 @@ describe("ElyPay", () => {
     });
   });
 
+  describe("Test pizza", async () => {
+    it("Add pizza to user!", async () => {
+      const { data: user } = await api.user.post({ name: "PizzaGuy" })
+      const { data: room } = await api.room.post({ totalSlices: 10 });
+
+      if (!user) return;
+      if (!room) return;
+
+      await api.user.pizza.post({ slicesEaten: 10, userId: user.uuid })
+      const { data: userPizza } = await api.user[user.uuid].get()
+
+      if (!userPizza) return;
+      expect(userPizza.slicesEaten).toBe(10)
+    })
+
+    it("Add pizza to room!", async () => {
+      const { data: room } = await api.room.post({ totalSlices: 10 });
+
+      if (!room) return;
+      const { data: roomPizza } = await api.room[room.uuid].get()
+
+      if (!roomPizza) return;
+      expect(roomPizza.totalSlices).toBe(10)
+    })
+  });
+
   describe("Error Handling Tests", () => {
     it("Fetch Non-existent Room", async () => {
       const response = await api.room["non-existent-room-id"].get();
@@ -128,7 +154,7 @@ describe("ElyPay", () => {
     });
 
     it("Duplicate User in Room", async () => {
-      const { data: room } = await api.room.post();
+      const { data: room } = await api.room.post({ totalSlices: 10 });
       const { data: user } = await api.user.post({ name: "TestUser" });
 
       if (!room) {
@@ -147,7 +173,7 @@ describe("ElyPay", () => {
     });
 
     it("Add non existing user to the rooms", async () => {
-      const { data: room } = await api.room.post();
+      const { data: room } = await api.room.post({ totalSlices: 10 });
       expect(room).not.toBeNull();
       if (!room) return;
 

@@ -1,26 +1,23 @@
-import { useState, useEffect } from "react";
-import getUuidFromUrl from "../util/getUuidFromUrl";
+import { useState } from "react";
 import { api } from "../util/apiConection";
 
-type RoomDetails = {
+type room = {
   uuid: string;
-  users: string[];
+  createdAt: Date;
   totalSlices: number;
-};
+} | null;
 
-const useGetRoomDetails = () => {
-  const uuid = getUuidFromUrl();
-
-  const [roomDetails, setRoomDetails] = useState<RoomDetails | null>(null);
+const usePostNewRoom = () => {
+  const [room, setRoom] = useState<room>(null);
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [error, setError] = useState<any>(null);
 
-  const fetchData = async () => {
+  const postUser = async (totalSlices: number) => {
     setIsLoading(true);
     try {
-      const res = await api.room[uuid].get();
-      setRoomDetails(res.data);
+      const res = await api.room.post({ totalSlices: totalSlices });
+      setRoom(res.data);
       setError(null);
 
       if (res.error) {
@@ -34,12 +31,7 @@ const useGetRoomDetails = () => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return { roomDetails, isLoading, error };
+  return { room, isLoading, error, postUser };
 };
 
-export default useGetRoomDetails;
+export default usePostNewRoom;

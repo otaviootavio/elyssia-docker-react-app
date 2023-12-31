@@ -4,5 +4,6 @@ export const tUserModel = new Elysia().model({
   user: t.Object({
     uuid: t.String(),
     name: t.String(),
+    slicesEaten: t.Integer(),
   }),
 });

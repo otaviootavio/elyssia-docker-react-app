@@ -9,15 +9,17 @@ datasource db {
 }
 
 model rooms {
-  uuid      String   @id @unique @default(uuid())
-  createdAt DateTime @default(now())
-  users     users[]
+  uuid        String   @id @unique @default(uuid())
+  createdAt   DateTime @default(now())
+  users       users[]
+  totalSlices Int
 }
 
 model users {
-  uuid      String   @id @unique @default(uuid())
-  createdAt DateTime @default(now())
-  name      String
-  rooms     rooms?   @relation(fields: [roomsUuid], references: [uuid])
-  roomsUuid String?
+  uuid        String   @id @unique @default(uuid())
+  createdAt   DateTime @default(now())
+  name        String
+  roomsUuid   String?
+  rooms       rooms?   @relation(fields: [roomsUuid], references: [uuid])
+  slicesEaten Int      @default(0)
 }

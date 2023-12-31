@@ -8,12 +8,12 @@ const prisma = new PrismaClient(
   }
 );
 
-const createRoom = async () => {
+const createRoom = async (totalSlices: number) => {
   const newRoom = await prisma.rooms.create({
     include: {
       users: true
     },
-    data: {},
+    data: { totalSlices: totalSlices },
   });
   return newRoom;
 };
@@ -47,6 +47,7 @@ const getRoomById = async (uuid: string) => {
   return {
     uuid: roomWithUsers.uuid,
     users: roomWithUsers.users.map(user => user.uuid),
+    totalSlices: roomWithUsers.totalSlices,
   };
 };
 

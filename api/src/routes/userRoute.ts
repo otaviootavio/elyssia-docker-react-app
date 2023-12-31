@@ -20,6 +20,26 @@ const createUserRoute = new Elysia()
   }
   );
 
+const addPizzaToUser = new Elysia()
+  .use(tUserModel)
+  .post(
+    "/user/pizza",
+    async ({ body }) => {
+      return await userController.addPizzaToUser(body.userId, body.slicesEaten)
+    }, {
+    body: t.Object({
+      userId: t.String(),
+      slicesEaten: t.Number()
+    }),
+    afterHandle: ({ set }) => {
+      set.status = 201;
+    },
+    response: {
+      201: t.Void(),
+    },
+  }
+  );
+
 const getAllUsers = new Elysia()
   .use(tUsersModel)
   .get(
@@ -51,10 +71,10 @@ const getUserByUuid = new Elysia()
       userid: t.String(),
     }),
     afterHandle: ({ set }) => {
-      set.status = 204;
+      set.status = 201;
     },
     response: {
-      204: 'user',
+      201: 'user',
     }
   })
 
@@ -85,6 +105,7 @@ const userRoutes = new Elysia().group("", (app) => app
   .use(createUserRoute)
   .use(getAllUsers)
   .use(getUserByUuid)
-  .use(deleteUserById));
+  .use(deleteUserById)
+  .use(addPizzaToUser));
 
 export { userRoutes };
