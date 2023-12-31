@@ -2,6 +2,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Heading,
   Tab,
   TabList,
   TabPanel,
@@ -16,7 +17,11 @@ import RoomDetails from "./RoomDetails";
 const Room = () => {
   return (
     <Card>
-      <CardHeader>Room</CardHeader>
+      <CardHeader>
+        <Heading as="h1" size="lg">
+          Room
+        </Heading>
+      </CardHeader>
       <CardBody>
         <Tabs variant="soft-rounded" colorScheme="green">
           <TabList>

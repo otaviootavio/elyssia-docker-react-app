@@ -4,6 +4,7 @@ import {
   Alert,
   AlertIcon,
   Button,
+  Heading,
   Input,
   InputGroup,
   InputRightElement,
@@ -21,11 +22,15 @@ const NewUserForm = () => {
 
   return (
     <Stack spacing={3}>
-      <h2>Create New User</h2>
+      <Heading as="h2" size="lg">
+        Create new user!
+      </Heading>
+
       <InputGroup>
         <Input
           type="text"
           id="name"
+          placeholder="Jonh Smith"
           value={name}
           width="34rem"
           onChange={(e) => setName(e.target.value)}

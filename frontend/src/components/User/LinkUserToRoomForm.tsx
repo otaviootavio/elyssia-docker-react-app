@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import useAddUserToRoom from "../../hooks/useAddUserToRoom";
-import { Alert, AlertIcon, Button, Input, Stack } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertIcon,
+  Button,
+  Heading,
+  Input,
+  Stack,
+} from "@chakra-ui/react";
 
 const AddUserToRoomForm = () => {
   const [roomId, setRoomId] = useState("");
@@ -14,7 +21,9 @@ const AddUserToRoomForm = () => {
 
   return (
     <Stack spacing={3}>
-      <h2>Add user to room!</h2>
+      <Heading as="h2" size="lg">
+        Add user to room!
+      </Heading>
       <Input
         type="text"
         value={roomId}

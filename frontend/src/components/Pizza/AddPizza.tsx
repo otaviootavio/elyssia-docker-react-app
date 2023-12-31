@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import usePostPizzaToUser from "../../hooks/usePostPizzaToUser";
-import { Alert, AlertIcon, Button, Input, Stack } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertIcon,
+  Button,
+  Heading,
+  Input,
+  Stack,
+} from "@chakra-ui/react";
 
 const AddPizza = () => {
   const [pizzaSlices, setPizzaSlices] = useState<number>(0);
@@ -14,7 +21,9 @@ const AddPizza = () => {
 
   return (
     <Stack>
-      <h2>Add pizza to user!</h2>
+      <Heading as="h2" size="lg">
+        Add slice to user!
+      </Heading>
       <Input
         type="number"
         value={pizzaSlices}
