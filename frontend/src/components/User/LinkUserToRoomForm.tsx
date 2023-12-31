@@ -8,11 +8,12 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
+import getUuidFromUrl from "../../util/getUuidFromUrl";
 
 const AddUserToRoomForm = () => {
-  const [roomId, setRoomId] = useState("");
   const [userId, setUserId] = useState("");
   const { linkUserToRoom, isLoading, error, success } = useAddUserToRoom();
+  const roomId = getUuidFromUrl();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,12 +25,6 @@ const AddUserToRoomForm = () => {
       <Heading as="h2" size="lg">
         Add user to room!
       </Heading>
-      <Input
-        type="text"
-        value={roomId}
-        onChange={(e) => setRoomId(e.target.value)}
-        placeholder="Enter Room ID"
-      />
       <Input
         type="text"
         value={userId}

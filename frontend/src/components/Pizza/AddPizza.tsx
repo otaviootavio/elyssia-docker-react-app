@@ -28,7 +28,7 @@ const AddPizza = () => {
         type="number"
         value={pizzaSlices}
         onChange={(e) => setPizzaSlices(parseInt(e.target.value))}
-        placeholder="Enter Room ID"
+        placeholder="Ammount of slices"
       />
       <Input
         type="text"

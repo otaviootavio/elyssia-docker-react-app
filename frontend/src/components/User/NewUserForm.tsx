@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import usePostNewUser from "../../hooks/usePostNewUser";
+import usePostNewUserToRoom from "../../hooks/usePostNewUserToRoom";
 import {
   Alert,
   AlertIcon,
@@ -10,14 +10,16 @@ import {
   InputRightElement,
   Stack,
 } from "@chakra-ui/react";
+import getUuidFromUrl from "../../util/getUuidFromUrl";
 
 const NewUserForm = () => {
   const [name, setName] = useState("");
-  const { user, isLoading, error, postUser } = usePostNewUser();
+  const { user, isLoading, error, postUser } = usePostNewUserToRoom();
+  const uuid = getUuidFromUrl();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    postUser(name);
+    postUser(name, uuid);
   };
 
   return (
