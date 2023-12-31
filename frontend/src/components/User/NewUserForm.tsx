@@ -1,5 +1,14 @@
 import React, { useState } from "react";
 import usePostNewUser from "../../hooks/usePostNewUser";
+import {
+  Alert,
+  AlertIcon,
+  Button,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Stack,
+} from "@chakra-ui/react";
 
 const NewUserForm = () => {
   const [name, setName] = useState("");
@@ -11,27 +20,41 @@ const NewUserForm = () => {
   };
 
   return (
-    <div>
+    <Stack spacing={3}>
       <h2>Create New User</h2>
-      <form onSubmit={handleSubmit}>
-        <input
+      <InputGroup>
+        <Input
           type="text"
+          id="name"
           value={name}
+          width="34rem"
           onChange={(e) => setName(e.target.value)}
-          placeholder="Enter name"
         />
-        <button type="submit" disabled={isLoading || !name}>
-          Submit
-        </button>
-      </form>
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
-      {user && (
-        <p>
-          User Created: {user.name} {user.uuid}
-        </p>
+        <InputRightElement width="5rem">
+          <Button
+            isLoading={isLoading}
+            disabled={isLoading}
+            size="sm"
+            onClick={handleSubmit}
+            h="1.75rem"
+          >
+            {isLoading ? "Creating..." : "Create"}
+          </Button>
+        </InputRightElement>
+      </InputGroup>
+      {error && (
+        <Alert status="error">
+          <AlertIcon />
+          {error.message}
+        </Alert>
       )}
-    </div>
+      {user && (
+        <Alert status="success">
+          <AlertIcon />
+          User Created: {user.name} {user.uuid}
+        </Alert>
+      )}
+    </Stack>
   );
 };
 

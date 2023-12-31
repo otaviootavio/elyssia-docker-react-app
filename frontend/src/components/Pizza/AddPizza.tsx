@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import usePostPizzaToUser from "../../hooks/usePostPizzaToUser";
+import { Alert, AlertIcon, Button, Input, Stack } from "@chakra-ui/react";
 
 const AddPizza = () => {
   const [pizzaSlices, setPizzaSlices] = useState<number>(0);
@@ -12,29 +13,36 @@ const AddPizza = () => {
   };
 
   return (
-    <div>
+    <Stack>
       <h2>Add pizza to user!</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="number"
-          value={pizzaSlices}
-          onChange={(e) => setPizzaSlices(parseInt(e.target.value))}
-          placeholder="Enter Room ID"
-        />
-        <input
-          type="text"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-          placeholder="Enter User ID"
-        />
-        <button type="submit" disabled={isLoading || !pizzaSlices || !userId}>
-          Eat!
-        </button>
-      </form>
+      <Input
+        type="number"
+        value={pizzaSlices}
+        onChange={(e) => setPizzaSlices(parseInt(e.target.value))}
+        placeholder="Enter Room ID"
+      />
+      <Input
+        type="text"
+        value={userId}
+        onChange={(e) => setUserId(e.target.value)}
+        placeholder="Enter User ID"
+      />
+      <Button onClick={handleSubmit} isLoading={isLoading}>
+        Eat!
+      </Button>
       {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {JSON.stringify(error)}</p>}
-      {success && <p>Yooooo, eat that pizza!</p>}
-    </div>
+      {error && (
+        <Alert status="error">
+          <AlertIcon /> Error: {JSON.stringify(error)}
+        </Alert>
+      )}
+      {success && (
+        <Alert status="success">
+          <AlertIcon />
+          Yooooo, eat that pizza!
+        </Alert>
+      )}
+    </Stack>
   );
 };
 

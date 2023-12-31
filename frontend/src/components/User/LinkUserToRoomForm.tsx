@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useAddUserToRoom from "../../hooks/useAddUserToRoom";
+import { Alert, AlertIcon, Button, Input, Stack } from "@chakra-ui/react";
 
 const AddUserToRoomForm = () => {
   const [roomId, setRoomId] = useState("");
@@ -12,29 +13,35 @@ const AddUserToRoomForm = () => {
   };
 
   return (
-    <div>
-      <h2>Link User to Room</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={roomId}
-          onChange={(e) => setRoomId(e.target.value)}
-          placeholder="Enter Room ID"
-        />
-        <input
-          type="text"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-          placeholder="Enter User ID"
-        />
-        <button type="submit" disabled={isLoading || !roomId || !userId}>
-          Link
-        </button>
-      </form>
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {JSON.stringify(error)}</p>}
-      {success && <p>User linked to room successfully!</p>}
-    </div>
+    <Stack spacing={3}>
+      <h2>Add user to room!</h2>
+      <Input
+        type="text"
+        value={roomId}
+        onChange={(e) => setRoomId(e.target.value)}
+        placeholder="Enter Room ID"
+      />
+      <Input
+        type="text"
+        value={userId}
+        onChange={(e) => setUserId(e.target.value)}
+        placeholder="Enter User ID"
+      />
+      <Button onClick={handleSubmit} isLoading={isLoading}>
+        Link
+      </Button>
+      {error && (
+        <Alert status="error">
+          <AlertIcon /> Error: {JSON.stringify(error)}
+        </Alert>
+      )}
+      {success && (
+        <Alert status="success">
+          <AlertIcon />
+          User linked to room successfully!
+        </Alert>
+      )}
+    </Stack>
   );
 };
 
