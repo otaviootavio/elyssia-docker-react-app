@@ -23,7 +23,7 @@ const NewRoom = () => {
   };
 
   return (
-    <Card margin="10px">
+    <Card>
       <CardHeader>
         <b>Create a New Room</b>
       </CardHeader>
