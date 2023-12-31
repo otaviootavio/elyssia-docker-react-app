@@ -1,4 +1,4 @@
-import { Center, ChakraProvider, Container, Flex } from "@chakra-ui/react";
+import { ChakraProvider, Container, Flex } from "@chakra-ui/react";
 import NewRoom from "./components/Room/NewRoom";
 import Room from "./components/Room/Room";
 import getUuidFromUrl from "./util/getUuidFromUrl";
