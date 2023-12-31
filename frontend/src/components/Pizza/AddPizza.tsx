@@ -20,7 +20,7 @@ const AddPizza = () => {
   };
 
   return (
-    <Stack>
+    <Stack spacing={3}>
       <Heading as="h2" size="lg">
         Add slice to user!
       </Heading>
