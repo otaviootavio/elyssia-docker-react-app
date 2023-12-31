@@ -11,6 +11,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Link,
 } from "@chakra-ui/react";
 
 const NewRoom = () => {
@@ -60,7 +61,7 @@ const NewRoom = () => {
         {room && (
           <Alert status="success">
             <AlertIcon />
-            Room created! {room.uuid}
+            <Link href={`${room.uuid}`}>Go to room!</Link>
           </Alert>
         )}
       </CardFooter>
