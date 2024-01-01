@@ -1,13 +1,9 @@
 import { useState, useEffect } from "react";
 import { api } from "../util/apiConection";
-
-type Room = {
-  uuid: string;
-  createdAt: Date;
-};
+import { room } from "../types/room.d";
 
 const useGetRooms = () => {
-  const [rooms, setRooms] = useState<Room[] | null>([]);
+  const [rooms, setRooms] = useState<room[] | null>([]);
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [error, setError] = useState<any>(null);

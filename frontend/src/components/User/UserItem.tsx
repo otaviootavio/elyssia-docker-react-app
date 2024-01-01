@@ -2,17 +2,13 @@ import { useEffect } from "react";
 import useGetUserById from "../../hooks/useGetUserById";
 import { Box, Text, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
 
-type Props = {
-  userId: string;
-};
-
-const UserItem = (props: Props) => {
+const UserItem = ({ userId }: { userId: string }) => {
   const { user, isLoading, error, getUser } = useGetUserById();
 
   useEffect(() => {
-    getUser(props.userId);
+    getUser(userId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.userId]);
+  }, [userId]);
 
   if (isLoading) {
     return (

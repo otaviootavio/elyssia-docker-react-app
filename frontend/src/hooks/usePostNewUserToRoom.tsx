@@ -1,15 +1,9 @@
 import { useState } from "react";
 import { api } from "../util/apiConection";
-
-type user = {
-  uuid: string;
-  createdAt: Date;
-  name: string;
-  roomsUuid: string | null;
-} | null;
+import { user } from "../types/user.d";
 
 const usePostNewUserToRoom = () => {
-  const [user, setUser] = useState<user>(null);
+  const [user, setUser] = useState<user | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [error, setError] = useState<any>(null);

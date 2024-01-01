@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
 import getUuidFromUrl from "../util/getUuidFromUrl";
 import { api } from "../util/apiConection";
-
-type RoomDetails = {
-  uuid: string;
-  users: string[];
-  totalSlices: number;
-};
+import { RoomDetails } from "./RoomDetails";
 
 const useGetRoomDetails = () => {
   const uuid = getUuidFromUrl();
