@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import getUuidFromUrl from "../util/getUuidFromUrl";
 import { api } from "../util/apiConection";
-import { RoomDetails } from "./RoomDetails";
+import { roomDetails } from "../types/roomDetails";
 
 const useGetRoomDetails = () => {
   const uuid = getUuidFromUrl();
 
-  const [roomDetails, setRoomDetails] = useState<RoomDetails | null>(null);
+  const [roomDetails, setRoomDetails] = useState<roomDetails | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [error, setError] = useState<any>(null);
