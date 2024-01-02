@@ -1,13 +1,12 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 
 interface LastUpdateTimeContextValue {
   lastUpdateTime: Date;
   updateToCurrentTime: () => void;
 }
 
-const LastUpdateTimeContext = createContext<LastUpdateTimeContextValue | null>(
-  null
-);
+export const LastUpdateTimeContext =
+  createContext<LastUpdateTimeContextValue | null>(null);
 
 export const LastUpdateTimeProvider = ({
   children,
@@ -31,13 +30,3 @@ export const LastUpdateTimeProvider = ({
     </LastUpdateTimeContext.Provider>
   );
 };
-
-export function useLastUpdateTimeContext() {
-  const context = useContext(LastUpdateTimeContext);
-  if (!context) {
-    throw new Error(
-      "useLastUpdateTimeContext must be used within a LastUpdateTimeProvider"
-    );
-  }
-  return context;
-}

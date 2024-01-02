@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { api } from "../util/apiConection";
-import { useLastUpdateTimeContext } from "../providers/LastUpdateTimeContext";
+import { useLastUpdateTimeContext } from "../providers/useLastUpdateTimeContext";
 
 const usePostPizzaToUser = () => {
   const [isLoading, setIsLoading] = useState(false);

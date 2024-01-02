@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import getUuidFromUrl from "../util/getUuidFromUrl";
 import { api } from "../util/apiConection";
 import { roomDetails } from "../types/roomDetails";
-import { useLastUpdateTimeContext } from "../providers/LastUpdateTimeContext";
+import { useLastUpdateTimeContext } from "../providers/useLastUpdateTimeContext";
 
 const useGetRoomDetails = () => {
   const uuid = getUuidFromUrl();

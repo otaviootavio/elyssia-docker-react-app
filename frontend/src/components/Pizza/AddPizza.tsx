@@ -6,18 +6,71 @@ import {
   Button,
   Heading,
   Input,
+  Select,
+  Skeleton,
   Stack,
 } from "@chakra-ui/react";
+import useGetRoomDetails from "../../hooks/useGetRoomDetails";
+import UserItem from "../User/UserItem";
 
 const AddPizza = () => {
   const [pizzaSlices, setPizzaSlices] = useState<number>(0);
   const [userId, setUserId] = useState("");
-  const { error, isLoading, linkUserToRoom, success } = usePostPizzaToUser();
+  const {
+    error: errorPostPizza,
+    isLoading: loadingPostPizza,
+    linkUserToRoom,
+    success,
+  } = usePostPizzaToUser();
+  const {
+    error: getRoomError,
+    isLoading: getRoomisLoading,
+    roomDetails,
+  } = useGetRoomDetails();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    linkUserToRoom(pizzaSlices, userId);
+
+    if (!roomDetails) {
+      throw new Error("Room details is undefined!");
+    }
+
+    const currentUser = roomDetails.users.find((user) => user.uuid == userId);
+
+    if (!currentUser) {
+      throw new Error("Could no find user");
+    }
+    const currentPizzaSlices = currentUser.slicesEaten;
+
+    if (currentPizzaSlices != 0 && !currentPizzaSlices) {
+      throw new Error("Number of slices is undefined!");
+    }
+
+    console.log(pizzaSlices + currentPizzaSlices);
+
+    linkUserToRoom(pizzaSlices + currentPizzaSlices, userId);
   };
+
+  if (getRoomError) {
+    return (
+      <Alert status="error">
+        <AlertIcon />
+        There was an error processing your request.
+        {getRoomError.message}
+      </Alert>
+    );
+  }
+
+  if (getRoomisLoading) {
+    return (
+      <Stack spacing={3}>
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" width="100px" />
+      </Stack>
+    );
+  }
 
   return (
     <Stack spacing={3}>
@@ -30,19 +83,29 @@ const AddPizza = () => {
         onChange={(e) => setPizzaSlices(parseInt(e.target.value))}
         placeholder="Ammount of slices"
       />
-      <Input
-        type="text"
+      <Select
         value={userId}
         onChange={(e) => setUserId(e.target.value)}
-        placeholder="Enter User ID"
-      />
-      <Button onClick={handleSubmit} isLoading={isLoading}>
+        placeholder="Select User"
+      >
+        {roomDetails?.users.map((user) => (
+          <option key={user.uuid} value={user.uuid}>
+            {user.name}
+          </option>
+        ))}
+      </Select>
+      {userId && roomDetails && (
+        <UserItem
+          user={roomDetails.users.find((user) => user.uuid == userId) || null}
+        />
+      )}
+      <Button onClick={handleSubmit} isLoading={loadingPostPizza}>
         Eat!
       </Button>
-      {isLoading && <p>Loading...</p>}
-      {error && (
+      {loadingPostPizza && <p>Loading...</p>}
+      {errorPostPizza && (
         <Alert status="error">
-          <AlertIcon /> Error: {JSON.stringify(error)}
+          <AlertIcon /> Error: {JSON.stringify(errorPostPizza)}
         </Alert>
       )}
       {success && (

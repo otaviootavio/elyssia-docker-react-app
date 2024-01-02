@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { api } from "../util/apiConection";
 import { user } from "../types/user.d";
-import { useLastUpdateTimeContext } from "../providers/LastUpdateTimeContext";
+import { useLastUpdateTimeContext } from "../providers/useLastUpdateTimeContext";
 
 const usePostNewUserToRoom = () => {
   const [user, setUser] = useState<user | null>(null);

@@ -2,7 +2,11 @@ import { Box, Text } from "@chakra-ui/react";
 import { user } from "../../types/user.d";
 import React from "react";
 
-const UserItem: React.FC<{ user: user }> = ({ user }: { user: user }) => {
+const UserItem: React.FC<{ user: user | null }> = ({
+  user,
+}: {
+  user: user | null;
+}) => {
   return (
     <Box p={5} shadow="md" borderWidth="1px">
       <Text mt={4}>

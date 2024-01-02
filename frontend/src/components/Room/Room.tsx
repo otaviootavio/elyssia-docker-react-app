@@ -10,7 +10,7 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import AddPizza from "../Pizza/AddPizza";
-import AddUserToRoomForm from "../User/LinkUserToRoomForm";
+// import AddUserToRoomForm from "../User/LinkUserToRoomForm";
 import NewUserForm from "../User/NewUserForm";
 import RoomDetails from "./RoomDetails";
 import { LastUpdateTimeProvider } from "../../providers/LastUpdateTimeContext";
@@ -29,7 +29,7 @@ const Room = () => {
             <TabList>
               <Tab>Details</Tab>
               <Tab>Create User</Tab>
-              <Tab>Add User to Room</Tab>
+              {/* <Tab>Add User to Room</Tab> */}
               <Tab>Eat!</Tab>
             </TabList>
             <TabPanels>
@@ -39,9 +39,10 @@ const Room = () => {
               <TabPanel>
                 <NewUserForm />
               </TabPanel>
+              {/* TODO
               <TabPanel>
                 <AddUserToRoomForm />
-              </TabPanel>
+              </TabPanel> */}
               <TabPanel>
                 <AddPizza />
               </TabPanel>
