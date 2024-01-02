@@ -9,7 +9,7 @@ const usePostPizzaToUser = () => {
   const [success, setSuccess] = useState(false);
   const { updateToCurrentTime } = useLastUpdateTimeContext();
 
-  const linkUserToRoom = async (slicesEaten: number, userId: string) => {
+  const addSliceToUser = async (slicesEaten: number, userId: string) => {
     setIsLoading(true);
     setSuccess(false);
     try {
@@ -30,7 +30,7 @@ const usePostPizzaToUser = () => {
     setIsLoading(false);
   };
 
-  return { linkUserToRoom, isLoading, error, success };
+  return { addSliceToUser, isLoading, error, success };
 };
 
 export default usePostPizzaToUser;

@@ -19,7 +19,7 @@ const AddPizza = () => {
   const {
     error: errorPostPizza,
     isLoading: loadingPostPizza,
-    linkUserToRoom,
+    addSliceToUser,
     success,
   } = usePostPizzaToUser();
   const {
@@ -48,7 +48,7 @@ const AddPizza = () => {
 
     console.log(pizzaSlices + currentPizzaSlices);
 
-    linkUserToRoom(pizzaSlices + currentPizzaSlices, userId);
+    addSliceToUser(pizzaSlices + currentPizzaSlices, userId);
   };
 
   if (getRoomError) {
