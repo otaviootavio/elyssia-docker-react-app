@@ -1,33 +1,8 @@
-import { useEffect } from "react";
-import useGetUserById from "../../hooks/useGetUserById";
-import { Box, Text, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
+import { user } from "../../types/user.d";
+import React from "react";
 
-const UserItem = ({ userId }: { userId: string }) => {
-  const { user, isLoading, error, getUser } = useGetUserById();
-
-  useEffect(() => {
-    getUser(userId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
-
-  if (isLoading) {
-    return (
-      <Box textAlign="center" py={5}>
-        <Spinner />
-        <Text>Loading user...</Text>
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Alert status="error">
-        <AlertIcon />
-        Error loading user: {error.message}
-      </Alert>
-    );
-  }
-
+const UserItem: React.FC<{ user: user }> = ({ user }: { user: user }) => {
   return (
     <Box p={5} shadow="md" borderWidth="1px">
       <Text mt={4}>
