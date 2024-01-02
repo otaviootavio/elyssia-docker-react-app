@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import getUuidFromUrl from "../util/getUuidFromUrl";
 import { api } from "../util/apiConection";
 import { roomDetails } from "../types/roomDetails";
+import { useLastUpdateTimeContext } from "../providers/LastUpdateTimeContext";
 
 const useGetRoomDetails = () => {
   const uuid = getUuidFromUrl();
@@ -10,6 +11,7 @@ const useGetRoomDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [error, setError] = useState<any>(null);
+  const { lastUpdateTime } = useLastUpdateTimeContext();
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -32,7 +34,7 @@ const useGetRoomDetails = () => {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [lastUpdateTime]);
 
   return { roomDetails, isLoading, error };
 };
