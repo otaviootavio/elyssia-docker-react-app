@@ -21,7 +21,7 @@ const useGetRoomDetails = () => {
       setError(null);
 
       if (res.error) {
-        console.error("Error adding pizza slice to user:", res.error);
+        console.error("Error getting user details:", res.error);
         setError(res.error);
       }
     } catch (error: unknown) {

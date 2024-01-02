@@ -16,7 +16,7 @@ const usePostNewRoom = () => {
       setError(null);
 
       if (res.error) {
-        console.error("Error adding pizza slice to user:", res.error);
+        console.error("Error adding new room:", res.error);
         setError(res.error);
       }
     } catch (error: unknown) {

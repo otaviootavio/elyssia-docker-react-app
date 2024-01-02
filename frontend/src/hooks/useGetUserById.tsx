@@ -16,7 +16,7 @@ const useGetUserById = () => {
       setError(null);
 
       if (res.error) {
-        console.error("Error adding pizza slice to user:", res.error);
+        console.error("Error fetching user by id:", res.error);
         setError(res.error);
       }
     } catch (error: unknown) {
