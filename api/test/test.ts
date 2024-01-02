@@ -41,7 +41,7 @@ describe("ElyPay", () => {
       const { data: roomData } = await api.room[room.uuid].get();
 
       expect(roomData).not.toBeNull();
-      expect(roomData?.users.find((e) => e === user.uuid)).not.toBeUndefined();
+      expect(roomData?.users.find((e) => e.uuid === user.uuid)).not.toBeUndefined();
     });
 
     it("Add members to the room and delete one user", async () => {
@@ -60,13 +60,13 @@ describe("ElyPay", () => {
       await api.room[room.uuid][user1.uuid].put()
       await api.room[room.uuid][user2.uuid].put()
       const { data: roomBeforeDelete } = await api.room[room.uuid].get()
-      expect(roomBeforeDelete?.users.findIndex(e => e === user1.uuid)).not.toBeNegative()
-      expect(roomBeforeDelete?.users.findIndex(e => e === user2.uuid)).not.toBeNegative()
+      expect(roomBeforeDelete?.users.findIndex(e => e.uuid === user1.uuid)).not.toBeNegative()
+      expect(roomBeforeDelete?.users.findIndex(e => e.uuid === user2.uuid)).not.toBeNegative()
 
       await api.user[user2.uuid].delete()
       const { data: roomAfterDelete } = await api.room[room.uuid].get()
-      expect(roomAfterDelete?.users.findIndex(e => e === user1.uuid)).not.toBeNegative()
-      expect(roomAfterDelete?.users.findIndex(e => e === user2.uuid)).toBeNegative()
+      expect(roomAfterDelete?.users.findIndex(e => e.uuid === user1.uuid)).not.toBeNegative()
+      expect(roomAfterDelete?.users.findIndex(e => e.uuid === user2.uuid)).toBeNegative()
     });
 
     it("Delete room", async () => {
