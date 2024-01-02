@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import usePostPizzaToUser from "../../hooks/usePostPizzaToUser";
 import {
+  AbsoluteCenter,
   Alert,
   AlertIcon,
+  Box,
   Button,
+  Divider,
+  FormControl,
+  FormLabel,
   Heading,
   Input,
   Select,
@@ -77,31 +82,52 @@ const AddPizza = () => {
       <Heading as="h2" size="lg">
         Add slice to user!
       </Heading>
-      <Input
-        type="number"
-        value={pizzaSlices}
-        onChange={(e) => setPizzaSlices(parseInt(e.target.value))}
-        placeholder="Ammount of slices"
-      />
-      <Select
-        value={userId}
-        onChange={(e) => setUserId(e.target.value)}
-        placeholder="Select User"
-      >
-        {roomDetails?.users.map((user) => (
-          <option key={user.uuid} value={user.uuid}>
-            {user.name}
-          </option>
-        ))}
-      </Select>
+      <FormControl>
+        <FormLabel>Select user!</FormLabel>
+        <Select
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
+          placeholder="Name"
+        >
+          {roomDetails?.users.map((user) => (
+            <option key={user.uuid} value={user.uuid}>
+              {user.name}
+            </option>
+          ))}
+        </Select>
+      </FormControl>
       {userId && roomDetails && (
-        <UserItem
-          user={roomDetails.users.find((user) => user.uuid == userId) || null}
-        />
+        <>
+          <Box position="relative" padding="10">
+            <Divider />
+            <AbsoluteCenter bg="white" px="4">
+              User status!
+            </AbsoluteCenter>
+          </Box>
+          <UserItem
+            user={roomDetails.users.find((user) => user.uuid == userId) || null}
+          />
+          <Box position="relative" padding="10">
+            <Divider />
+            <AbsoluteCenter bg="white" px="4">
+              Add slices form
+            </AbsoluteCenter>
+          </Box>
+          <FormControl>
+            <FormLabel>Number of new slices!</FormLabel>
+            <Input
+              type="number"
+              value={pizzaSlices}
+              onChange={(e) => setPizzaSlices(parseInt(e.target.value))}
+              placeholder="Ammount of slices"
+            />
+          </FormControl>
+          <Button onClick={handleSubmit} isLoading={loadingPostPizza}>
+            Eat!
+          </Button>
+        </>
       )}
-      <Button onClick={handleSubmit} isLoading={loadingPostPizza}>
-        Eat!
-      </Button>
+
       {loadingPostPizza && <p>Loading...</p>}
       {errorPostPizza && (
         <Alert status="error">

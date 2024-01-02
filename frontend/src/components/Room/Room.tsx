@@ -3,6 +3,7 @@ import {
   CardBody,
   CardHeader,
   Heading,
+  Link,
   Tab,
   TabList,
   TabPanel,
@@ -18,6 +19,7 @@ import { LastUpdateTimeProvider } from "../../providers/LastUpdateTimeContext";
 const Room = () => {
   return (
     <LastUpdateTimeProvider>
+      <Link href="/">🏠 Home</Link>
       <Card>
         <CardHeader>
           <Heading as="h1" size="lg">
