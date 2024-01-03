@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, Heading, Text } from "@chakra-ui/react";
+import { Card, CardBody, Text } from "@chakra-ui/react";
 import { user } from "../../types/user.d";
 import React from "react";
 
