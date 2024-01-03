@@ -54,9 +54,6 @@ const RoomDetails = () => {
         Room Details
       </Heading>
       <Text mt={2}>
-        <strong>UUID:</strong> {roomDetails.uuid}
-      </Text>
-      <Text mt={2}>
         <strong>Total slices:</strong> {roomDetails.totalSlices}
       </Text>
 

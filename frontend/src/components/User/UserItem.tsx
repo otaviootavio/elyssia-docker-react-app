@@ -10,9 +10,6 @@ const UserItem: React.FC<{ user: user | null }> = ({
   return (
     <Box p={5} shadow="md" borderWidth="1px">
       <Text mt={4}>
-        <strong>UUID:</strong> {user?.uuid}
-      </Text>
-      <Text mt={4}>
         <strong>Name:</strong> {user?.name}
       </Text>
       <Text mt={4}>
