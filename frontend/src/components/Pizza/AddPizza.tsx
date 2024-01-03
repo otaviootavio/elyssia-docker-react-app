@@ -69,7 +69,7 @@ const AddPizza = () => {
   return (
     <Stack spacing={3}>
       <Heading as="h2" size="lg">
-        Add slice to user!
+        Add slices to user!
       </Heading>
       <FormControl>
         <FormLabel>Select user!</FormLabel>
@@ -99,7 +99,7 @@ const AddPizza = () => {
           <Box position="relative" padding="10">
             <Divider />
             <AbsoluteCenter bg="white" px="4">
-              Add slices form
+              Add slices!
             </AbsoluteCenter>
           </Box>
           <FormControl>
