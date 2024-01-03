@@ -66,17 +66,6 @@ const AddPizza = () => {
     );
   }
 
-  if (getRoomisLoading) {
-    return (
-      <Stack spacing={3}>
-        <Skeleton height="40px" />
-        <Skeleton height="40px" />
-        <Skeleton height="40px" />
-        <Skeleton height="40px" width="100px" />
-      </Stack>
-    );
-  }
-
   return (
     <Stack spacing={3}>
       <Heading as="h2" size="lg">
