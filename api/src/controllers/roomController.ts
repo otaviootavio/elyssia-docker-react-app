@@ -36,7 +36,7 @@ const getRoomById = async (uuid: string) => {
   const roomWithUsers = await prisma.rooms.findUnique({
     where: { uuid: uuid },
     include: {
-      users: true, // Include the users in each room
+      users: true
     },
   });
 
@@ -46,7 +46,7 @@ const getRoomById = async (uuid: string) => {
 
   return {
     uuid: roomWithUsers.uuid,
-    users: roomWithUsers.users.map(user => user.uuid),
+    users: roomWithUsers.users,
     totalSlices: roomWithUsers.totalSlices,
   };
 };

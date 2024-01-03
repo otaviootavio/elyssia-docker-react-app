@@ -61,7 +61,7 @@ const NewRoom = () => {
         {room && (
           <Alert status="success">
             <AlertIcon />
-            <Link href={`${room.uuid}`}>Go to room!</Link>
+            <Link href={`${room.uuid}`}>Go to room! 🍕</Link>
           </Alert>
         )}
       </CardFooter>

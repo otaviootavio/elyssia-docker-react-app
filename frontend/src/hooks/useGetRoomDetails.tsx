@@ -1,20 +1,17 @@
 import { useState, useEffect } from "react";
 import getUuidFromUrl from "../util/getUuidFromUrl";
 import { api } from "../util/apiConection";
-
-type RoomDetails = {
-  uuid: string;
-  users: string[];
-  totalSlices: number;
-};
+import { roomDetails } from "../types/roomDetails";
+import { useLastUpdateTimeContext } from "../providers/useLastUpdateTimeContext";
 
 const useGetRoomDetails = () => {
   const uuid = getUuidFromUrl();
 
-  const [roomDetails, setRoomDetails] = useState<RoomDetails | null>(null);
+  const [roomDetails, setRoomDetails] = useState<roomDetails | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [error, setError] = useState<any>(null);
+  const { lastUpdateTime } = useLastUpdateTimeContext();
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -24,7 +21,7 @@ const useGetRoomDetails = () => {
       setError(null);
 
       if (res.error) {
-        console.error("Error adding pizza slice to user:", res.error);
+        console.error("Error getting user details:", res.error);
         setError(res.error);
       }
     } catch (error: unknown) {
@@ -37,7 +34,7 @@ const useGetRoomDetails = () => {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [lastUpdateTime]);
 
   return { roomDetails, isLoading, error };
 };

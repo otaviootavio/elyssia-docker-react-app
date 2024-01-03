@@ -58,7 +58,7 @@ const NewUserForm = () => {
       {user && (
         <Alert status="success">
           <AlertIcon />
-          User Created: {user.name} {user.uuid}
+          User Created!
         </Alert>
       )}
     </Stack>

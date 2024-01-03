@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { api } from "../util/apiConection";
-
-type user = {
-  uuid: string;
-  createdAt: Date;
-  name: string;
-  roomsUuid: string | null;
-} | null;
+import { user } from "../types/user.d";
+import { useLastUpdateTimeContext } from "../providers/useLastUpdateTimeContext";
 
 const usePostNewUserToRoom = () => {
-  const [user, setUser] = useState<user>(null);
+  const [user, setUser] = useState<user | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [error, setError] = useState<any>(null);
+  const { updateToCurrentTime } = useLastUpdateTimeContext();
 
   const postUser = async (name: string, roomId: string) => {
     setIsLoading(true);
@@ -21,6 +17,7 @@ const usePostNewUserToRoom = () => {
       await api.room[roomId][res_1.data?.uuid || "0"].put();
       setUser(res_1.data);
       setError(null);
+      updateToCurrentTime();
     } catch (error: unknown) {
       console.error("Error fetching data:", error);
       setError(error);

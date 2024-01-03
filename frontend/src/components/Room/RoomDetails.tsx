@@ -54,9 +54,6 @@ const RoomDetails = () => {
         Room Details
       </Heading>
       <Text mt={2}>
-        <strong>UUID:</strong> {roomDetails.uuid}
-      </Text>
-      <Text mt={2}>
         <strong>Total slices:</strong> {roomDetails.totalSlices}
       </Text>
 
@@ -65,8 +62,8 @@ const RoomDetails = () => {
       </Heading>
       <List spacing={3} mt={2}>
         {roomDetails.users.map((user) => (
-          <ListItem key={user}>
-            <UserItem userId={user} />
+          <ListItem key={user.uuid}>
+            <UserItem user={user} />
           </ListItem>
         ))}
       </List>

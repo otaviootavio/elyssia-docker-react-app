@@ -21,7 +21,6 @@ const RoomsList = () => {
       <ul>
         {rooms.map((room) => (
           <li key={room.uuid}>
-            <p>UUID: {room.uuid}</p>
             <p>Created At: {new Date(room.createdAt).toLocaleDateString()}</p>
           </li>
         ))}
