@@ -12,7 +12,6 @@ import {
   Heading,
   Input,
   Select,
-  Skeleton,
   Stack,
 } from "@chakra-ui/react";
 import useGetRoomDetails from "../../hooks/useGetRoomDetails";
@@ -27,11 +26,7 @@ const AddPizza = () => {
     addSliceToUser,
     success,
   } = usePostPizzaToUser();
-  const {
-    error: getRoomError,
-    isLoading: getRoomisLoading,
-    roomDetails,
-  } = useGetRoomDetails();
+  const { error: getRoomError, roomDetails } = useGetRoomDetails();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
