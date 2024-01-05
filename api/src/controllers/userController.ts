@@ -1,5 +1,5 @@
-import { PrismaClient, users } from "@prisma/client";
-import { UserNotFound } from "../libs/UserErrors";
+import { Prisma, PrismaClient, users } from "@prisma/client";
+import { NotFoundError } from "elysia";
 
 const prisma = new PrismaClient(
   {
@@ -17,36 +17,30 @@ const userController = {
     return newUser;
   },
   deleteUser: async (uuid: string) => {
-    const user = await prisma.users.findUnique({
-      where: { uuid },
-    });
-
-    if (!user) {
-      throw new UserNotFound(`User with id ${uuid} was not found`);
-    }
-
     await prisma.users.delete({
       where: { uuid },
-    });
+    }).catch((e) => {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025' || e.code === 'P2016') {
+          throw new NotFoundError(`Can't find user with id ${uuid}`);
+        }
+      }
+      throw e;
+    })
   },
-  // updateUser: async () => {
-  // },
+
   getUserByUuid: async (uuid: string): Promise<users> => {
     const user = await prisma.users.findUnique({ where: { uuid } })
 
     if (!user) {
-      throw new UserNotFound(`User with id ${uuid} was not found`);
+      throw new NotFoundError(`User with id ${uuid} was not found`);
     }
 
     return user
   },
-  getAllUsers: async (): Promise<users[]> => {
-    const allUsers: users[] = await prisma.users.findMany();
-    return allUsers;
-  },
 
   addPizzaToUser: async (userId: string, slicesEaten: number) => {
-    await prisma.users.update({
+    const user = await prisma.users.update({
       where: { uuid: userId },
       data: { slicesEaten: slicesEaten }
     })
