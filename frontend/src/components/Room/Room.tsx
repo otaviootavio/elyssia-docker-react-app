@@ -15,6 +15,7 @@ import AddPizza from "../Pizza/AddPizza";
 import NewUserForm from "../User/NewUserForm";
 import RoomDetails from "./RoomDetails";
 import { LastUpdateTimeProvider } from "../../providers/LastUpdateTimeContext";
+import SocialShareWrapper from "../Social/SocialShareWrapper";
 
 const Room = () => {
   return (
@@ -25,6 +26,7 @@ const Room = () => {
           <Heading as="h1" size="lg">
             Room
           </Heading>
+          <SocialShareWrapper />
         </CardHeader>
         <CardBody>
           <Tabs variant="soft-rounded" colorScheme="green">
