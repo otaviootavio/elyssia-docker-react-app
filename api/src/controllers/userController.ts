@@ -40,7 +40,7 @@ const userController = {
   },
 
   addPizzaToUser: async (userId: string, slicesEaten: number) => {
-    const user = await prisma.users.update({
+    await prisma.users.update({
       where: { uuid: userId },
       data: { slicesEaten: slicesEaten }
     })
