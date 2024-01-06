@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { RoomNotFound, UserAlreadyExistsOnRoom } from "../libs/RoomErrors";
-import { UserNotFound } from "../libs/UserErrors";
+import { Prisma, PrismaClient } from "@prisma/client";
+import { NotFoundError } from "elysia";
 
 const prisma = new PrismaClient(
   {
@@ -19,17 +18,16 @@ const createRoom = async (totalSlices: number) => {
 };
 
 const deleteRoomById = async (uuid: string) => {
-  const room = await prisma.rooms.findUnique({
-    where: { uuid },
-  });
-
-  if (!room) {
-    throw new RoomNotFound(`Room with id ${uuid} was not found`);
-  }
-
   await prisma.rooms.delete({
     where: { uuid },
-  });
+  }).catch((e) => {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2025' || e.code === 'P2016') {
+        throw new NotFoundError(`Can't find user with id ${uuid}`);
+      }
+    }
+    throw e;
+  })
 };
 
 const getRoomById = async (uuid: string) => {
@@ -41,7 +39,7 @@ const getRoomById = async (uuid: string) => {
   });
 
   if (!roomWithUsers) {
-    throw new RoomNotFound(`Room with id ${uuid} was not found`);
+    throw new NotFoundError(`Room with id ${uuid} was not found`);
   }
 
   return {
@@ -51,39 +49,20 @@ const getRoomById = async (uuid: string) => {
   };
 };
 
-const getAllRooms = async () => {
-  return await prisma.rooms.findMany();
-};
+
 
 const addUserToRoom = async (roomId: string, userId: string) => {
-
-  const existingUser = await prisma.users.findFirst({
-    where: {
-      uuid: userId
-    },
-  });
+  const [existingUser, room] = await Promise.all([
+    prisma.users.findUnique({ where: { uuid: userId } }),
+    prisma.rooms.findUnique({ where: { uuid: roomId } }),
+  ]);
 
   if (!existingUser) {
-    throw new UserNotFound(`User with id ${userId} was not found`);
+    throw new NotFoundError(`User with id ${userId} was not found`);
   }
-
-  const room = await prisma.rooms.findUnique({
-    where: { uuid: roomId },
-  });
 
   if (!room) {
-    throw new RoomNotFound(`Room with id ${roomId} was not found`);
-  }
-
-  const existingAssociation = await prisma.users.findFirst({
-    where: {
-      uuid: userId,
-      roomsUuid: roomId,
-    },
-  });
-
-  if (existingAssociation) {
-    throw new UserAlreadyExistsOnRoom("User is already in the room");
+    throw new NotFoundError(`Room with id ${roomId} was not found`);
   }
 
   const updatedUser = await prisma.users.update({
@@ -92,7 +71,6 @@ const addUserToRoom = async (roomId: string, userId: string) => {
   });
 
   return updatedUser;
-
 };
 
-export { createRoom, deleteRoomById, addUserToRoom, getRoomById, getAllRooms };
+export { createRoom, deleteRoomById, addUserToRoom, getRoomById };

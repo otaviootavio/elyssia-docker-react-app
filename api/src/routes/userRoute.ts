@@ -1,8 +1,6 @@
 import Elysia, { t } from "elysia";
 import { userController } from "../controllers/userController";
-import { tUsersModel } from "../models/users.model";
 import { tUserModel } from "../models/user.model";
-import { UserNotFound } from "./../libs/UserErrors"
 
 const createUserRoute = new Elysia()
   .use(tUserModel)
@@ -40,25 +38,12 @@ const addPizzaToUser = new Elysia()
   }
   );
 
-const getAllUsers = new Elysia()
-  .use(tUsersModel)
-  .get(
-    "/users",
-    async () => {
-      return await userController.getAllUsers()
-    }, {
-    response: {
-      201: "users",
-    },
-  }
-  );
 
 const getUserByUuid = new Elysia()
   .use(tUserModel)
-  .error({ UserNotFound })
   .onError(({ code, error, set }) => {
     switch (code) {
-      case "UserNotFound":
+      case "NOT_FOUND":
         set.status = 404;
         return error;
     }
@@ -79,10 +64,9 @@ const getUserByUuid = new Elysia()
   })
 
 const deleteUserById = new Elysia()
-  .error({ UserNotFound })
   .onError(({ code, error, set }) => {
     switch (code) {
-      case "UserNotFound":
+      case "NOT_FOUND":
         set.status = 404;
         return error;
     }
@@ -103,7 +87,6 @@ const deleteUserById = new Elysia()
   })
 const userRoutes = new Elysia().group("", (app) => app
   .use(createUserRoute)
-  .use(getAllUsers)
   .use(getUserByUuid)
   .use(deleteUserById)
   .use(addPizzaToUser));

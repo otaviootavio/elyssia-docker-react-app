@@ -12,6 +12,7 @@ COPY prisma ./prisma/
 # COPY ENV variable
 COPY .env ./
 
+RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
 RUN bun install
 RUN bunx prisma generate
 
