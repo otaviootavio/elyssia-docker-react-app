@@ -58,7 +58,7 @@ const NewUserForm = () => {
       {user && (
         <Alert status="success">
           <AlertIcon />
-          User Created!
+          User {user.name} created!
         </Alert>
       )}
     </Stack>
