@@ -10,16 +10,17 @@ services:
     build: ./api/
     ports:
       - "3000:3000"
-  postgres:
-    image: postgres:latest
+  mysql:
+    image: mysql:latest
     environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      MYSQL_DATABASE: elypay_local
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - mysql-data:/var/lib/mysql
 
 volumes:
-  postgres-data:
+  mysql-data:
