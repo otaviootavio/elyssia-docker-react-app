@@ -1,16 +1,13 @@
 import {
   Box,
   Text,
-  Heading,
-  List,
-  ListItem,
-  Alert,
+  Heading, Alert,
   AlertIcon,
   Skeleton,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 import useGetRoomDetails from "../../hooks/useGetRoomDetails";
-import UserItem from "../User/UserItem";
+import UsersInRoom from "./UsersInRoom";
 
 const RoomDetails = () => {
   const { roomDetails, isLoading, error } = useGetRoomDetails();
@@ -56,17 +53,7 @@ const RoomDetails = () => {
       <Text mt={2}>
         <strong>Total slices:</strong> {roomDetails.totalSlices}
       </Text>
-
-      <Heading as="h3" size="md" mt={4}>
-        Users in this Room:
-      </Heading>
-      <List spacing={3} mt={2}>
-        {roomDetails.users.map((user) => (
-          <ListItem key={user.uuid}>
-            <UserItem user={user} />
-          </ListItem>
-        ))}
-      </List>
+      {roomDetails.users.length > 0 && <UsersInRoom users={roomDetails.users} />}
     </>
   );
 };
