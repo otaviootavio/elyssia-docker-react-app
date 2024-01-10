@@ -71,6 +71,8 @@ Solution: use only the docker postgres and run the app locally. To dockerize the
 [Error occurred during query execution: ConnectorError code:26000](https://github.com/prisma/prisma/issues/21531)
 Solution: add `pgbouncer=true` at the end of `DATABASE_URL`
 
+[Cloud run + mysql + prisma](https://stackoverflow.com/questions/76853144/how-to-connect-a-mysql-database-from-node-js-prisma-running-on-google-cloud-run)
+
 ### Building to dev
 
 ```bash
