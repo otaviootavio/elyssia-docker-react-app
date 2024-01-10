@@ -4,7 +4,7 @@
   "scripts": {
     "test": "bun test ./test/test.ts",
     "dev": "bun run --watch src/index.ts",
-    "build": "bun build ./src/index.ts --outdir ./build --target node --splitting",
+    "prod": "NODE_ENV='production' && bun run --watch src/index.ts",
     "seed": "bun run ./src/seed.ts"
   },
   "dependencies": {
@@ -14,6 +14,7 @@
     "@prisma/client": "^5.7.1",
     "elysia": "^0.7.30",
     "elysia-helmet": "^1.0.1",
+    "elysia-rate-limit": "^2.0.1",
     "prisma": "^5.7.1"
   },
   "devDependencies": {
